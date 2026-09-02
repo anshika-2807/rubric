@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#F8F6F2;color:#000;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+</style>
+</helmet>
+
+<div style="max-width:1180px;margin:0 auto;padding:0 40px;">
+
+  <!-- NAV -->
+  <nav style="display:flex;align-items:center;justify-content:space-between;height:88px;border-bottom:1px solid #EAEAEA;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <svg width="36.4" height="23.400000000000002" viewBox="-60 -32 120 64" style="overflow:visible;"><path d="M -48 14 Q -36 -22 -20 -6 Q -8 14 -22 22 Q -32 22 -20 8 Q -4 -18 12 0 Q 28 18 14 24 Q 4 24 16 12 Q 28 -6 44 4 Q 56 16 50 24" fill="none" stroke="#fa6519" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-family:'Newsreader',serif;font-style:italic;font-size:22px;letter-spacing:-0.01em;">rubrik<span style="color:{{ accent }};">.</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:40px;">
+      <a href="#how" style="font-size:14px;color:#000;text-decoration:none;opacity:0.7;">How it works</a>
+      <a href="#levels" style="font-size:14px;color:#000;text-decoration:none;opacity:0.7;">Levels</a>
+      <a href="2026-08-11_rubrik_skill-picker.dc.html" style="font-size:14px;color:#000;text-decoration:none;opacity:0.7;">Skills</a>
+      <a href="2026-08-11_rubrik_public-resume.dc.html" style="font-size:14px;color:#000;text-decoration:none;opacity:0.7;">Résumé</a>
+      <a href="2026-08-11_rubrik_skill-picker.dc.html" style="font-size:14px;font-weight:500;color:#fff;background:#000;text-decoration:none;padding:11px 20px;">Get verified</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header style="padding:112px 0 96px;display:grid;grid-template-columns:1fr auto;gap:64px;align-items:end;">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:10px;background:{{ chipBg }};color:{{ chipText }};padding:8px 14px;margin-bottom:36px;">
+        <div style="width:6px;height:6px;background:{{ chipDot }};border-radius:50%;"></div>
+        <span style="font-size:12px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;">Performance-based verification</span>
+      </div>
+      <h1 style="font-family:{{ headFamily }};font-weight:{{ headWeight }};font-size:72px;line-height:1.0;letter-spacing:-0.025em;max-width:880px;text-wrap:balance;">
+        Certificates prove<br>you showed up.<br><span style="font-style:{{ headEmphStyle }};color:{{ accent }};">SkillProof proves<br>you understand.</span>
+      </h1>
+      <p style="font-size:19px;line-height:1.55;color:#000;opacity:0.66;max-width:540px;margin-top:36px;">
+        We verify real-world skills through performance-based challenges — explanation, application, reasoning, and knowledge transfer. Not course completion.
+      </p>
+      <div style="display:flex;align-items:center;gap:24px;margin-top:48px;">
+        <a href="#start" style="font-size:15px;font-weight:500;color:{{ primaryBtnText }};background:{{ primaryBtnBg }};text-decoration:none;padding:15px 28px;white-space:nowrap;">Pick a skill to verify</a>
+        <a href="#how" style="font-size:15px;font-weight:500;color:#000;text-decoration:none;border-bottom:1px solid #BDBDBD;padding-bottom:3px;white-space:nowrap;">See how it works</a>
+      </div>
+    </div>
+    <sc-if value="{{ showHeroMark }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+        <div style="width:160px;height:160px;background:{{ accent }};display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Newsreader',serif;font-style:italic;font-size:80px;line-height:1;">SP</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#000;opacity:0.5;">VERIFIED · EST. 2025</div>
+      </div>
+    </sc-if>
+  </header>
+
+  <!-- CONTRAST STRIP -->
+  <section style="display:grid;grid-template-columns:1fr 1fr;border:1px solid #EAEAEA;">
+    <div style="background:#fff;padding:48px 52px;border-right:1px solid #EAEAEA;">
+      <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#000;opacity:0.45;margin-bottom:28px;">Traditional credentials</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:16px;">
+        <li style="font-size:16px;color:#000;opacity:0.55;display:flex;gap:14px;"><span style="color:#BDBDBD;">—</span>Measure participation</li>
+        <li style="font-size:16px;color:#000;opacity:0.55;display:flex;gap:14px;"><span style="color:#BDBDBD;">—</span>Reward course completion</li>
+        <li style="font-size:16px;color:#000;opacity:0.55;display:flex;gap:14px;"><span style="color:#BDBDBD;">—</span>Static, one-time</li>
+      </ul>
+    </div>
+    <div style="background:{{ contrastBg }};color:{{ contrastText }};padding:48px 52px;">
+      <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:{{ contrastLabel }};margin-bottom:28px;font-weight:500;">SkillProof</div>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:16px;">
+        <li style="font-size:16px;display:flex;gap:14px;font-weight:500;"><span style="color:{{ contrastMark }};">+</span>Measures actual understanding</li>
+        <li style="font-size:16px;display:flex;gap:14px;font-weight:500;"><span style="color:{{ contrastMark }};">+</span>Rewards demonstrated reasoning</li>
+        <li style="font-size:16px;display:flex;gap:14px;font-weight:500;"><span style="color:{{ contrastMark }};">+</span>Earned through challenge rounds</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" style="padding:128px 0 40px;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:64px;">
+      <h2 style="font-family:{{ headFamily }};font-weight:{{ headWeight }};font-size:44px;letter-spacing:-0.02em;">How verification works</h2>
+      <span style="font-size:13px;color:#000;opacity:0.5;">Four steps</span>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#EAEAEA;border:1px solid #EAEAEA;">
+      <sc-for list="{{ steps }}" as="step" hint-placeholder-count="4">
+        <div style="background:#F8F6F2;padding:36px 28px 44px;position:relative;">
+          <div style="font-family:'Newsreader',serif;font-size:42px;color:{{ accent }};margin-bottom:36px;line-height:1;">{{ step.num }}</div>
+          <h3 style="font-size:17px;font-weight:600;margin-bottom:12px;letter-spacing:-0.01em;">{{ step.title }}</h3>
+          <p style="font-size:14px;line-height:1.55;color:#000;opacity:0.6;">{{ step.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- LEVELS -->
+  <section id="levels" style="padding:128px 0 40px;">
+    <h2 style="font-family:{{ headFamily }};font-weight:{{ headWeight }};font-size:44px;letter-spacing:-0.02em;margin-bottom:16px;">Verification levels</h2>
+    <p style="font-size:17px;color:#000;opacity:0.6;max-width:520px;margin-bottom:56px;">Each skill is verified to one of four levels, based on how you perform across challenge rounds.</p>
+    <div style="display:flex;flex-direction:column;">
+      <sc-for list="{{ levels }}" as="lv" hint-placeholder-count="4">
+        <div style="display:grid;grid-template-columns:64px 220px 1fr auto;align-items:center;gap:32px;padding:30px 4px;border-top:1px solid #EAEAEA;">
+          <div style="font-family:'Newsreader',serif;font-size:22px;color:#000;opacity:0.4;">{{ lv.idx }}</div>
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="width:10px;height:10px;background:{{ lv.dot }};"></div>
+            <span style="font-size:19px;font-weight:600;letter-spacing:-0.01em;">{{ lv.name }}</span>
+          </div>
+          <p style="font-size:15px;line-height:1.5;color:#000;opacity:0.62;">{{ lv.body }}</p>
+          <div style="display:flex;gap:5px;">
+            <sc-for list="{{ lv.bars }}" as="b" hint-placeholder-count="4">
+              <div style="width:32px;height:8px;background:{{ b }};"></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <div style="border-top:1px solid #EAEAEA;"></div>
+    </div>
+  </section>
+
+  <!-- PROFILE / RESUME DASHBOARD -->
+  <section id="profile" style="padding:128px 0 40px;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:48px;">
+      <div style="max-width:560px;">
+        <span style="font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:{{ accent }};font-weight:600;">Public profile · Verifiable résumé</span>
+        <h2 style="font-family:{{ headFamily }};font-weight:{{ headWeight }};font-size:44px;letter-spacing:-0.02em;margin:18px 0 20px;line-height:1.05;">A résumé backed by proof</h2>
+        <p style="font-size:17px;line-height:1.6;color:#000;opacity:0.64;">One page that doubles as a CV. Every skill links to the challenge history that earned its level — shareable, exportable, impossible to fake.</p>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button style="font-size:13px;font-weight:500;color:#000;background:#fff;border:1px solid #EAEAEA;padding:10px 16px;cursor:pointer;white-space:nowrap;">Share link</button>
+        <button style="font-size:13px;font-weight:500;color:#fff;background:#000;border:1px solid #000;padding:10px 16px;cursor:pointer;white-space:nowrap;">Export PDF</button>
+      </div>
+    </div>
+
+    <!-- Dashboard surface -->
+    <div style="background:#fff;border:1px solid #EAEAEA;">
+
+      <!-- Top header bar -->
+      <div style="display:grid;grid-template-columns:1fr auto;gap:32px;padding:36px 40px;border-bottom:1px solid #EAEAEA;align-items:center;">
+        <div style="display:flex;align-items:center;gap:22px;">
+          <div style="width:68px;height:68px;background:{{ accent }};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;font-style:italic;font-size:30px;">DO</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <h3 style="font-family:{{ headFamily }};font-weight:{{ headWeight }};font-size:28px;letter-spacing:-0.015em;line-height:1;">Dana Okonkwo</h3>
+              <div style="display:inline-flex;align-items:center;gap:6px;background:{{ accent }};color:#fff;padding:3px 9px;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;">
+                <span style="width:5px;height:5px;background:#fff;border-radius:50%;"></span>Verified
+              </div>
+            </div>
+            <div style="font-size:14px;color:#000;opacity:0.65;">Senior Data Engineer · Lagos / Remote · she/her</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.45;letter-spacing:0.04em;">skillproof.io/dana-okonkwo</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:1px;background:#EAEAEA;border:1px solid #EAEAEA;">
+          <div style="background:#fff;padding:14px 22px;text-align:center;min-width:96px;">
+            <div style="font-family:'Newsreader',serif;font-size:30px;line-height:1;color:{{ accent }};">7</div>
+            <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#000;opacity:0.55;margin-top:6px;">Verified</div>
+          </div>
+          <div style="background:#fff;padding:14px 22px;text-align:center;min-width:96px;">
+            <div style="font-family:'Newsreader',serif;font-size:30px;line-height:1;">42</div>
+            <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#000;opacity:0.55;margin-top:6px;">Rounds</div>
+          </div>
+          <div style="background:#fff;padding:14px 22px;text-align:center;min-width:96px;">
+            <div style="font-family:'Newsreader',serif;font-size:30px;line-height:1;">94%</div>
+            <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#000;opacity:0.55;margin-top:6px;">Pass rate</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Body: skills + sidebar -->
+      <div style="display:grid;grid-template-columns:1.55fr 1fr;">
+
+        <!-- Verified skills table -->
+        <div style="padding:32px 40px;border-right:1px solid #EAEAEA;">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;">
+            <h4 style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#000;opacity:0.55;font-weight:600;">Verified skills</h4>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.45;">7 / 7 current</span>
+          </div>
+          <div style="display:flex;flex-direction:column;">
+            <sc-for list="{{ resumeSkills }}" as="r" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;padding:20px 0;border-top:1px solid #EAEAEA;">
+                <div style="display:flex;flex-direction:column;gap:6px;min-width:0;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:15px;font-weight:600;letter-spacing:-0.01em;">{{ r.skill }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#000;opacity:0.4;">{{ r.id }}</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:#000;opacity:0.55;">
+                    <span>Verified {{ r.date }}</span>
+                    <span style="opacity:0.4;">·</span>
+                    <span>{{ r.rounds }} rounds</span>
+                    <span style="opacity:0.4;">·</span>
+                    <span>{{ r.score }}</span>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <div style="display:flex;gap:4px;">
+                    <sc-for list="{{ r.bars }}" as="b" hint-placeholder-count="4">
+                      <div style="width:22px;height:6px;background:{{ b }};"></div>
+                    </sc-for>
+                  </div>
+                  <span style="font-size:12px;font-weight:600;min-width:88px;text-align:right;letter-spacing:-0.01em;">{{ r.level }}</span>
+                </div>
+              </div>
+            </sc-for>
+            <div style="border-top:1px solid #EAEAEA;"></div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div style="padding:32px 40px;display:flex;flex-direction:column;gap:36px;">
+          <div>
+            <h4 style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#000;opacity:0.55;font-weight:600;margin-bottom:16px;">Strengths</h4>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <sc-for list="{{ strengths }}" as="s" hint-placeholder-count="6">
+                <span style="font-size:12px;padding:6px 10px;background:#F8F6F2;border:1px solid #EAEAEA;color:#000;">{{ s }}</span>
+              </sc-for>
+            </div>
+          </div>
+
+          <div>
+            <h4 style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#000;opacity:0.55;font-weight:600;margin-bottom:16px;">Recent activity</h4>
+            <div style="display:flex;flex-direction:column;">
+              <sc-for list="{{ activity }}" as="a" hint-placeholder-count="3">
+                <div style="display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:start;padding:12px 0;border-top:1px solid #EAEAEA;">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.5;">{{ a.when }}</span>
+                  <div style="display:flex;flex-direction:column;gap:3px;min-width:0;">
+                    <span style="font-size:13px;font-weight:500;">{{ a.title }}</span>
+                    <span style="font-size:12px;color:#000;opacity:0.55;">{{ a.detail }}</span>
+                  </div>
+                  <span style="font-size:11px;font-weight:600;color:{{ a.tagColor }};letter-spacing:0.04em;text-transform:uppercase;">{{ a.tag }}</span>
+                </div>
+              </sc-for>
+              <div style="border-top:1px solid #EAEAEA;"></div>
+            </div>
+          </div>
+
+          <div style="border-top:1px solid #EAEAEA;padding-top:20px;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;line-height:1.6;">
+              ATTESTATION ID · SP-94F2-DK17<br>
+              ISSUED · 14 MAY 2026 · VALID · CURRENT<br>
+              VERIFY · skillproof.io/v/dana-okonkwo
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="start" style="background:{{ ctaBg }};color:{{ ctaText }};margin:128px 0 0;padding:96px 64px;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:0;right:0;width:8px;height:100%;background:{{ ctaStrip }};"></div>
+    <h2 style="font-family:{{ headFamily }};font-weight:{{ headWeight }};font-size:56px;letter-spacing:-0.02em;line-height:1.0;max-width:640px;">Prove the skill, not the certificate.</h2>
+    <p style="font-size:18px;opacity:0.65;max-width:480px;margin-top:24px;">Pick a skill, submit your learning sources, and take the challenge. Verification takes about 30 minutes.</p>
+    <a href="#start" style="display:inline-block;font-size:15px;font-weight:500;color:{{ ctaBtnText }};background:{{ ctaBtnBg }};text-decoration:none;padding:15px 30px;margin-top:44px;white-space:nowrap;">Start verification</a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="display:flex;align-items:center;justify-content:space-between;padding:40px 0;">
+    <div style="display:flex;align-items:center;gap:9px;">
+      <div style="width:10px;height:10px;background:{{ accent }};"></div>
+      <span style="font-size:14px;font-weight:600;">SkillProof</span>
+    </div>
+    <span style="font-size:13px;color:#000;opacity:0.45;">Verified skills, not credentials.</span>
+  </footer>
+
+</div>
+
+
+<!-- RUBI · CORNER GREETER -->
+<div style="position:fixed;bottom:24px;right:24px;display:flex;align-items:flex-end;gap:12px;z-index:50;font-family:'Inter',sans-serif;">
+  <div style="background:#000;color:#fff;padding:12px 14px;max-width:240px;border:2px solid #000;font-family:'Newsreader',serif;font-size:14px;line-height:1.35;position:relative;box-shadow:4px 4px 0 rgba(0,0,0,0.15);">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;color:#fa6519;font-style:normal;">RUBI</span>
+    <p style="margin-top:4px;font-style:italic;">"Hi. I'm not impressed <span style="color:#fa6519;">yet</span>."</p>
+    <div style="position:absolute;right:-10px;bottom:18px;width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:10px solid #000;"></div>
+  </div>
+  <svg width="64" height="72" viewBox="0 0 180 200" style="filter:drop-shadow(3px 3px 0 rgba(0,0,0,0.12));">
+    <path d="M40 70 Q40 22 90 22 Q140 22 140 70 Q140 118 90 118 Q40 118 40 70 Z" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="74" cy="78" r="4.5" fill="#000"/>
+    <circle cx="106" cy="78" r="4.5" fill="#000"/>
+    <path d="M76 96 L104 96" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M44 95 Q22 130 30 168" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M136 95 Q158 130 150 168" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </svg>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: 1260 },
+  &quot;accent&quot;: {
+    &quot;editor&quot;: &quot;color&quot;,
+    &quot;default&quot;: &quot;#fa6519&quot;,
+    &quot;tsType&quot;: &quot;string&quot;,
+    &quot;options&quot;: [&quot;#fa6519&quot;, &quot;#C96442&quot;, &quot;#0A66FF&quot;, &quot;#1F8A5B&quot;, &quot;#000000&quot;]
+  },
+  &quot;mood&quot;: {
+    &quot;editor&quot;: &quot;enum&quot;,
+    &quot;default&quot;: &quot;editorial&quot;,
+    &quot;tsType&quot;: &quot;'editorial' | 'modern' | 'technical'&quot;,
+    &quot;options&quot;: [&quot;editorial&quot;, &quot;modern&quot;, &quot;technical&quot;]
+  },
+  &quot;accentDensity&quot;: {
+    &quot;editor&quot;: &quot;enum&quot;,
+    &quot;default&quot;: &quot;prominent&quot;,
+    &quot;tsType&quot;: &quot;'restrained' | 'prominent' | 'saturated'&quot;,
+    &quot;options&quot;: [&quot;restrained&quot;, &quot;prominent&quot;, &quot;saturated&quot;]
+  }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#fa6519';
+    const mood = this.props.mood ?? 'editorial';
+    const density = this.props.accentDensity ?? 'prominent';
+
+    const G = '#EAEAEA', M = '#BDBDBD';
+
+    // Mood: editorial = serif italic emphasis; modern = sans tight; technical = mono caps
+    const moodMap = {
+      editorial: { headFamily: "'Newsreader', serif", headWeight: 400, headEmphStyle: 'italic' },
+      modern:    { headFamily: "'Inter', sans-serif", headWeight: 700, headEmphStyle: 'normal' },
+      technical: { headFamily: "'JetBrains Mono', monospace", headWeight: 500, headEmphStyle: 'normal' },
+    };
+    const m = moodMap[mood] || moodMap.editorial;
+
+    // Density: how much accent fills the page
+    let chipBg, chipText, chipDot, primaryBtnBg, primaryBtnText, showHeroMark;
+    let contrastBg, contrastText, contrastLabel, contrastMark;
+    let ctaBg, ctaText, ctaStrip, ctaBtnBg, ctaBtnText;
+
+    if (density === 'restrained') {
+      chipBg = 'transparent'; chipText = '#000'; chipDot = accent;
+      primaryBtnBg = '#000'; primaryBtnText = '#fff';
+      showHeroMark = false;
+      contrastBg = '#fff'; contrastText = '#000'; contrastLabel = accent; contrastMark = accent;
+      ctaBg = '#000'; ctaText = '#fff'; ctaStrip = accent; ctaBtnBg = '#fff'; ctaBtnText = '#000';
+    } else if (density === 'saturated') {
+      chipBg = accent; chipText = '#fff'; chipDot = '#fff';
+      primaryBtnBg = accent; primaryBtnText = '#fff';
+      showHeroMark = true;
+      contrastBg = accent; contrastText = '#fff'; contrastLabel = '#fff'; contrastMark = '#fff';
+      ctaBg = accent; ctaText = '#fff'; ctaStrip = '#000'; ctaBtnBg = '#000'; ctaBtnText = '#fff';
+    } else { // prominent
+      chipBg = '#000'; chipText = '#fff'; chipDot = accent;
+      primaryBtnBg = '#000'; primaryBtnText = '#fff';
+      showHeroMark = true;
+      contrastBg = '#000'; contrastText = '#fff'; contrastLabel = accent; contrastMark = accent;
+      ctaBg = '#000'; ctaText = '#fff'; ctaStrip = accent; ctaBtnBg = accent; ctaBtnText = '#fff';
+    }
+
+    return {
+      accent,
+      headFamily: m.headFamily,
+      headWeight: m.headWeight,
+      headEmphStyle: m.headEmphStyle,
+      chipBg, chipText, chipDot,
+      primaryBtnBg, primaryBtnText,
+      showHeroMark,
+      contrastBg, contrastText, contrastLabel, contrastMark,
+      ctaBg, ctaText, ctaStrip, ctaBtnBg, ctaBtnText,
+
+      steps: [
+        { num: '01', title: 'Pick a skill', body: 'Choose what you want verified — from data modeling to negotiation.' },
+        { num: '02', title: 'Submit sources', body: 'Share the materials, projects, or experience you learned from.' },
+        { num: '03', title: 'Take the rounds', body: 'Challenge rounds test explanation, application, and reasoning.' },
+        { num: '04', title: 'Earn a level', body: 'Your performance maps to a verification level on your profile.' },
+      ],
+      levels: [
+        { idx: '01', name: 'Beginner',     dot: M,      body: 'Demonstrates foundational understanding and can apply core concepts with guidance.',     bars: [accent, G, G, G] },
+        { idx: '02', name: 'Intermediate', dot: M,      body: 'Applies skills independently and explains reasoning across common scenarios.',           bars: [accent, accent, G, G] },
+        { idx: '03', name: 'Advanced',     dot: accent, body: 'Handles complex, ambiguous problems and transfers knowledge to new domains.',            bars: [accent, accent, accent, G] },
+        { idx: '04', name: 'Expert',       dot: accent, body: 'Reasons from first principles and teaches the skill to others convincingly.',            bars: [accent, accent, accent, accent] },
+      ],
+      resumeSkills: [
+        { skill: 'SQL & Data Modeling',     id: 'SP-001', date: 'May 2026', rounds: 8, score: '96 / 100', level: 'Expert',       bars: [accent, accent, accent, accent] },
+        { skill: 'Distributed Systems',     id: 'SP-014', date: 'Apr 2026', rounds: 7, score: '91 / 100', level: 'Expert',       bars: [accent, accent, accent, accent] },
+        { skill: 'Technical Writing',       id: 'SP-027', date: 'Mar 2026', rounds: 6, score: '88 / 100', level: 'Advanced',     bars: [accent, accent, accent, G] },
+        { skill: 'Systems Design',          id: 'SP-033', date: 'Feb 2026', rounds: 6, score: '82 / 100', level: 'Advanced',     bars: [accent, accent, accent, G] },
+        { skill: 'Python for Data',         id: 'SP-042', date: 'Jan 2026', rounds: 5, score: '79 / 100', level: 'Intermediate', bars: [accent, accent, G, G] },
+        { skill: 'Stakeholder Communication', id: 'SP-051', date: 'Dec 2025', rounds: 5, score: '74 / 100', level: 'Intermediate', bars: [accent, accent, G, G] },
+        { skill: 'Rust Fundamentals',       id: 'SP-068', date: 'Nov 2025', rounds: 5, score: '68 / 100', level: 'Beginner',     bars: [accent, G, G, G] },
+      ],
+      strengths: ['Schema design', 'Query optimization', 'Knowledge transfer', 'First-principles reasoning', 'Written explanation', 'Cross-domain transfer'],
+      activity: [
+        { when: '12 JUN', title: 'Distributed Systems — Round 7', detail: 'Consensus & partition tolerance', tag: 'Passed', tagColor: accent },
+        { when: '04 JUN', title: 'Technical Writing — Re-verification', detail: 'Maintained Advanced level', tag: 'Renewed', tagColor: '#000' },
+        { when: '29 MAY', title: 'SQL — Round 8', detail: 'Window functions, query plans', tag: 'Passed', tagColor: accent },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

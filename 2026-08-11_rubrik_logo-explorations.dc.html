@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#EAEAEA;color:#000;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+</style>
+</helmet>
+
+<div style="width:max-content;min-width:100%;min-height:100vh;padding:48px;background:#EAEAEA;box-sizing:border-box;">
+
+  <!-- Header -->
+  <header style="max-width:1320px;margin-bottom:40px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.16em;color:#000;opacity:0.5;">EXPLORATION · NAMING + IDENTITY</div>
+    <h1 style="font-family:'Newsreader',serif;font-weight:400;font-size:54px;letter-spacing:-0.025em;margin-top:12px;line-height:1;">Names &amp; <span style="font-style:italic;color:#fa6519;">marks</span></h1>
+    <p style="font-size:15px;color:#000;opacity:0.65;margin-top:14px;max-width:560px;line-height:1.5;">Six naming directions, each paired with a wordmark and a compact symbol. Same brand DNA: confident, minimal, the #fa6519 accent doing the heavy lifting.</p>
+  </header>
+
+  <!-- ============ NAME OPTIONS ROW ============ -->
+  <section style="margin-bottom:64px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#000;opacity:0.55;margin-bottom:16px;">01 · NAME DIRECTIONS</div>
+    <div style="display:flex;gap:18px;align-items:flex-start;">
+      <sc-for list="{{ names }}" as="n" hint-placeholder-count="6">
+        <div style="flex:none;width:240px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;margin-bottom:6px;">{{ n.idx }}</div>
+          <div style="background:#fff;border:1px solid #000;padding:24px 22px;min-height:240px;display:flex;flex-direction:column;">
+            <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:38px;letter-spacing:-0.025em;line-height:0.95;">{{ n.name }}</h2>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#fa6519;margin-top:6px;text-transform:uppercase;">{{ n.tagline }}</div>
+            <p style="font-size:12.5px;line-height:1.5;color:#000;opacity:0.7;margin-top:14px;">{{ n.rationale }}</p>
+            <div style="margin-top:auto;padding-top:16px;border-top:1px dashed #EAEAEA;display:flex;align-items:center;justify-content:space-between;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;color:#000;opacity:0.55;">{{ n.domain }}</span>
+              <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:{{ n.toneColor }};background:{{ n.toneBg }};padding:3px 7px;">{{ n.tone }}</span>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ============ WORDMARK + SYMBOL GRID ============ -->
+  <section style="margin-bottom:64px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#000;opacity:0.55;margin-bottom:16px;">02 · WORDMARKS + SYMBOLS</div>
+
+    <div style="display:grid;grid-template-columns:repeat(3,420px);gap:18px;">
+
+      <!-- ---- SkillProof: the proof block ---- -->
+      <div style="background:#fff;border:1px solid #000;display:flex;flex-direction:column;">
+        <div style="padding:14px 18px;border-bottom:1px solid #EAEAEA;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.6;">A · THE PROOF BLOCK</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#fa6519;">SKILLPROOF</span>
+        </div>
+        <div style="padding:36px 32px;display:flex;flex-direction:column;gap:32px;align-items:flex-start;">
+          <!-- wordmark -->
+          <div style="display:flex;align-items:center;gap:14px;">
+            <svg width="42" height="42" viewBox="0 0 42 42">
+              <rect x="2" y="2" width="38" height="38" fill="#000"/>
+              <rect x="10" y="10" width="22" height="22" fill="#fa6519"/>
+              <rect x="18" y="18" width="6" height="6" fill="#fff"/>
+            </svg>
+            <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:34px;letter-spacing:-0.03em;">Skill<span style="color:#fa6519;">Proof</span></span>
+          </div>
+          <!-- inverted -->
+          <div style="background:#000;color:#fff;padding:20px 24px;display:flex;align-items:center;gap:12px;align-self:stretch;">
+            <svg width="28" height="28" viewBox="0 0 42 42"><rect x="2" y="2" width="38" height="38" fill="#fff"/><rect x="10" y="10" width="22" height="22" fill="#fa6519"/><rect x="18" y="18" width="6" height="6" fill="#000"/></svg>
+            <span style="font-family:'Inter',sans-serif;font-weight:700;font-size:22px;letter-spacing:-0.03em;">Skill<span style="color:#fa6519;">Proof</span></span>
+          </div>
+          <!-- favicon row -->
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="width:48px;height:48px;background:#000;display:flex;align-items:center;justify-content:center;"><div style="width:26px;height:26px;background:#fa6519;"></div></div>
+            <div style="width:32px;height:32px;background:#000;display:flex;align-items:center;justify-content:center;"><div style="width:18px;height:18px;background:#fa6519;"></div></div>
+            <div style="width:20px;height:20px;background:#000;display:flex;align-items:center;justify-content:center;"><div style="width:10px;height:10px;background:#fa6519;"></div></div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;">FAVICONS · 48/32/20</span>
+          </div>
+        </div>
+        <div style="padding:14px 18px;border-top:1px solid #EAEAEA;font-size:11px;color:#000;opacity:0.7;line-height:1.5;">Nested squares = challenge → verified → core skill. Reads as a stamp of proof.</div>
+      </div>
+
+      <!-- ---- Verified: the slash mark ---- -->
+      <div style="background:#fff;border:1px solid #000;display:flex;flex-direction:column;">
+        <div style="padding:14px 18px;border-bottom:1px solid #EAEAEA;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.6;">B · THE SLASH</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#fa6519;">PROVEN</span>
+        </div>
+        <div style="padding:36px 32px;display:flex;flex-direction:column;gap:32px;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <circle cx="22" cy="22" r="20" fill="none" stroke="#000" stroke-width="2.5"/>
+              <path d="M12 23 L19 30 L33 14" stroke="#fa6519" stroke-width="4" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
+            </svg>
+            <span style="font-family:'Newsreader',serif;font-weight:400;font-size:38px;letter-spacing:-0.025em;">Proven<span style="font-style:italic;color:#fa6519;">.</span></span>
+          </div>
+          <div style="background:#fa6519;color:#fff;padding:20px 24px;display:flex;align-items:center;gap:12px;align-self:stretch;">
+            <svg width="28" height="28" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M12 23 L19 30 L33 14" stroke="#fff" stroke-width="4" fill="none"/></svg>
+            <span style="font-family:'Newsreader',serif;font-style:italic;font-size:24px;letter-spacing:-0.02em;">Proven.</span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <svg width="48" height="48" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="#000"/><path d="M12 23 L19 30 L33 14" stroke="#fa6519" stroke-width="5" fill="none"/></svg>
+            <svg width="32" height="32" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="#000"/><path d="M12 23 L19 30 L33 14" stroke="#fa6519" stroke-width="6" fill="none"/></svg>
+            <svg width="20" height="20" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20" fill="#000"/><path d="M12 23 L19 30 L33 14" stroke="#fa6519" stroke-width="8" fill="none"/></svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;">FAVICONS · 48/32/20</span>
+          </div>
+        </div>
+        <div style="padding:14px 18px;border-top:1px solid #EAEAEA;font-size:11px;color:#000;opacity:0.7;line-height:1.5;">A literal checkmark — but the period after "Proven" carries the conviction. Editorial confidence.</div>
+      </div>
+
+      <!-- ---- Crucible: the ember ---- -->
+      <div style="background:#fff;border:1px solid #000;display:flex;flex-direction:column;">
+        <div style="padding:14px 18px;border-bottom:1px solid #EAEAEA;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.6;">C · THE EMBER</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#fa6519;">CRUCIBLE</span>
+        </div>
+        <div style="padding:36px 32px;display:flex;flex-direction:column;gap:32px;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <svg width="42" height="42" viewBox="0 0 42 42">
+              <rect x="3" y="3" width="36" height="36" fill="none" stroke="#000" stroke-width="2"/>
+              <rect x="3" y="21" width="36" height="18" fill="#fa6519"/>
+              <rect x="3" y="3" width="36" height="36" fill="none" stroke="#000" stroke-width="2"/>
+              <line x1="21" y1="3" x2="21" y2="39" stroke="#000" stroke-width="2"/>
+            </svg>
+            <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;letter-spacing:-0.02em;line-height:1;">Crucible</span>
+          </div>
+          <div style="background:#000;color:#fff;padding:20px 24px;display:flex;align-items:center;gap:12px;align-self:stretch;">
+            <svg width="28" height="28" viewBox="0 0 42 42"><rect x="3" y="3" width="36" height="36" fill="none" stroke="#fff" stroke-width="2"/><rect x="3" y="21" width="36" height="18" fill="#fa6519"/><rect x="3" y="3" width="36" height="36" fill="none" stroke="#fff" stroke-width="2"/><line x1="21" y1="3" x2="21" y2="39" stroke="#fff" stroke-width="2"/></svg>
+            <span style="font-family:'Instrument Serif',serif;font-size:24px;">Crucible</span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <svg width="48" height="48" viewBox="0 0 42 42"><rect x="0" y="0" width="42" height="42" fill="#000"/><rect x="0" y="21" width="42" height="21" fill="#fa6519"/></svg>
+            <svg width="32" height="32" viewBox="0 0 42 42"><rect x="0" y="0" width="42" height="42" fill="#000"/><rect x="0" y="21" width="42" height="21" fill="#fa6519"/></svg>
+            <svg width="20" height="20" viewBox="0 0 42 42"><rect x="0" y="0" width="42" height="42" fill="#000"/><rect x="0" y="21" width="42" height="21" fill="#fa6519"/></svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;">FAVICONS · 48/32/20</span>
+          </div>
+        </div>
+        <div style="padding:14px 18px;border-top:1px solid #EAEAEA;font-size:11px;color:#000;opacity:0.7;line-height:1.5;">A vessel half-full of molten accent. Skills are forged, not collected.</div>
+      </div>
+
+      <!-- ---- Caliber: the gauge ---- -->
+      <div style="background:#fff;border:1px solid #000;display:flex;flex-direction:column;">
+        <div style="padding:14px 18px;border-bottom:1px solid #EAEAEA;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.6;">D · THE GAUGE</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#fa6519;">CALIBER</span>
+        </div>
+        <div style="padding:36px 32px;display:flex;flex-direction:column;gap:32px;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <line x1="4" y1="38" x2="40" y2="38" stroke="#000" stroke-width="2"/>
+              <line x1="4" y1="38" x2="4" y2="30" stroke="#000" stroke-width="2"/>
+              <line x1="13" y1="38" x2="13" y2="32" stroke="#000" stroke-width="2"/>
+              <line x1="22" y1="38" x2="22" y2="30" stroke="#000" stroke-width="2"/>
+              <line x1="31" y1="38" x2="31" y2="32" stroke="#fa6519" stroke-width="2"/>
+              <line x1="40" y1="38" x2="40" y2="30" stroke="#fa6519" stroke-width="2"/>
+              <rect x="2" y="6" width="22" height="14" fill="#fa6519"/>
+              <rect x="2" y="6" width="22" height="14" fill="none" stroke="#000" stroke-width="2"/>
+            </svg>
+            <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:34px;letter-spacing:-0.04em;text-transform:lowercase;">caliber</span>
+          </div>
+          <div style="background:#F8F6F2;padding:20px 24px;display:flex;align-items:center;gap:14px;align-self:stretch;border:1px solid #EAEAEA;">
+            <svg width="28" height="28" viewBox="0 0 44 44"><line x1="4" y1="38" x2="40" y2="38" stroke="#000" stroke-width="2"/><line x1="4" y1="38" x2="4" y2="28" stroke="#000" stroke-width="2"/><line x1="22" y1="38" x2="22" y2="28" stroke="#000" stroke-width="2"/><line x1="40" y1="38" x2="40" y2="28" stroke="#fa6519" stroke-width="2"/><rect x="2" y="6" width="22" height="14" fill="#fa6519"/></svg>
+            <span style="font-family:'Inter',sans-serif;font-weight:800;font-size:22px;letter-spacing:-0.04em;text-transform:lowercase;">caliber<span style="color:#fa6519;">.</span></span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <svg width="48" height="48" viewBox="0 0 44 44"><rect x="0" y="0" width="44" height="44" fill="#000"/><rect x="6" y="14" width="22" height="14" fill="#fa6519"/><rect x="6" y="32" width="32" height="2" fill="#fff"/></svg>
+            <svg width="32" height="32" viewBox="0 0 44 44"><rect x="0" y="0" width="44" height="44" fill="#000"/><rect x="6" y="14" width="22" height="14" fill="#fa6519"/></svg>
+            <svg width="20" height="20" viewBox="0 0 44 44"><rect x="0" y="0" width="44" height="44" fill="#000"/><rect x="8" y="14" width="22" height="14" fill="#fa6519"/></svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;">FAVICONS · 48/32/20</span>
+          </div>
+        </div>
+        <div style="padding:14px 18px;border-top:1px solid #EAEAEA;font-size:11px;color:#000;opacity:0.7;line-height:1.5;">A measurement bar — your caliber, literally graded. Lowercase wordmark reads modern and tool-like.</div>
+      </div>
+
+      <!-- ---- Mettle: the wedge ---- -->
+      <div style="background:#fff;border:1px solid #000;display:flex;flex-direction:column;">
+        <div style="padding:14px 18px;border-bottom:1px solid #EAEAEA;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.6;">E · THE WEDGE</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#fa6519;">METTLE</span>
+        </div>
+        <div style="padding:36px 32px;display:flex;flex-direction:column;gap:32px;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <svg width="42" height="42" viewBox="0 0 42 42">
+              <polygon points="4,38 21,4 38,38" fill="#000"/>
+              <polygon points="13,38 21,21 29,38" fill="#fa6519"/>
+            </svg>
+            <span style="font-family:'Newsreader',serif;font-weight:400;font-size:40px;letter-spacing:-0.025em;">Mettle</span>
+          </div>
+          <div style="background:#000;color:#fff;padding:20px 24px;display:flex;align-items:center;gap:12px;align-self:stretch;">
+            <svg width="28" height="28" viewBox="0 0 42 42"><polygon points="4,38 21,4 38,38" fill="#fff"/><polygon points="13,38 21,21 29,38" fill="#fa6519"/></svg>
+            <span style="font-family:'Newsreader',serif;font-size:24px;letter-spacing:-0.02em;">Mettle</span>
+            <span style="font-family:'Newsreader',serif;font-style:italic;font-size:18px;color:#fa6519;opacity:0.9;margin-left:6px;">— proof of skill</span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <svg width="48" height="48" viewBox="0 0 42 42"><rect width="42" height="42" fill="#000"/><polygon points="4,38 21,4 38,38" fill="#fff"/><polygon points="13,38 21,21 29,38" fill="#fa6519"/></svg>
+            <svg width="32" height="32" viewBox="0 0 42 42"><rect width="42" height="42" fill="#000"/><polygon points="4,38 21,4 38,38" fill="#fff"/><polygon points="13,38 21,21 29,38" fill="#fa6519"/></svg>
+            <svg width="20" height="20" viewBox="0 0 42 42"><rect width="42" height="42" fill="#000"/><polygon points="4,38 21,4 38,38" fill="#fff"/></svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;">FAVICONS · 48/32/20</span>
+          </div>
+        </div>
+        <div style="padding:14px 18px;border-top:1px solid #EAEAEA;font-size:11px;color:#000;opacity:0.7;line-height:1.5;">Climbing peak with a hot core. "Mettle" is the unfakeable thing — character under pressure.</div>
+      </div>
+
+      <!-- ---- Rubric: the bracket ---- -->
+      <div style="background:#fff;border:1px solid #000;display:flex;flex-direction:column;">
+        <div style="padding:14px 18px;border-bottom:1px solid #EAEAEA;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.6;">F · THE BRACKET</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#fa6519;">RUBRIC</span>
+        </div>
+        <div style="padding:36px 32px;display:flex;flex-direction:column;gap:32px;align-items:flex-start;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <svg width="44" height="44" viewBox="0 0 44 44">
+              <path d="M14 4 L4 4 L4 40 L14 40" fill="none" stroke="#000" stroke-width="3" stroke-linejoin="miter"/>
+              <path d="M30 4 L40 4 L40 40 L30 40" fill="none" stroke="#000" stroke-width="3" stroke-linejoin="miter"/>
+              <rect x="18" y="14" width="8" height="16" fill="#fa6519"/>
+            </svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:30px;letter-spacing:-0.04em;text-transform:lowercase;">rubric</span>
+          </div>
+          <div style="background:#fa6519;color:#000;padding:20px 24px;display:flex;align-items:center;gap:12px;align-self:stretch;">
+            <svg width="28" height="28" viewBox="0 0 44 44"><path d="M14 4 L4 4 L4 40 L14 40" fill="none" stroke="#000" stroke-width="3"/><path d="M30 4 L40 4 L40 40 L30 40" fill="none" stroke="#000" stroke-width="3"/><rect x="18" y="14" width="8" height="16" fill="#000"/></svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:600;font-size:22px;letter-spacing:-0.04em;text-transform:lowercase;">rubric<span style="opacity:0.6;">/</span></span>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center;">
+            <svg width="48" height="48" viewBox="0 0 44 44"><rect width="44" height="44" fill="#000"/><path d="M14 8 L8 8 L8 36 L14 36" fill="none" stroke="#fff" stroke-width="3"/><path d="M30 8 L36 8 L36 36 L30 36" fill="none" stroke="#fff" stroke-width="3"/><rect x="18" y="18" width="8" height="8" fill="#fa6519"/></svg>
+            <svg width="32" height="32" viewBox="0 0 44 44"><rect width="44" height="44" fill="#000"/><path d="M14 8 L8 8 L8 36 L14 36" fill="none" stroke="#fff" stroke-width="3"/><path d="M30 8 L36 8 L36 36 L30 36" fill="none" stroke="#fff" stroke-width="3"/><rect x="18" y="18" width="8" height="8" fill="#fa6519"/></svg>
+            <svg width="20" height="20" viewBox="0 0 44 44"><rect width="44" height="44" fill="#000"/><rect x="18" y="18" width="8" height="8" fill="#fa6519"/></svg>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;">FAVICONS · 48/32/20</span>
+          </div>
+        </div>
+        <div style="padding:14px 18px;border-top:1px solid #EAEAEA;font-size:11px;color:#000;opacity:0.7;line-height:1.5;">Brackets frame the work; the bar inside is the score. Mono wordmark for a tool-like, dev-friendly read.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ IN-CONTEXT PREVIEW ============ -->
+  <section style="margin-bottom:48px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#000;opacity:0.55;margin-bottom:16px;">03 · IN CONTEXT · BROWSER TAB + APP NAV</div>
+    <div style="display:flex;gap:18px;align-items:flex-start;">
+      <sc-for list="{{ contexts }}" as="ctx" hint-placeholder-count="6">
+        <div style="flex:none;width:280px;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.5;margin-bottom:6px;">{{ ctx.label }}</div>
+          <div style="background:#F8F6F2;border:1px solid #000;">
+            <!-- browser tab -->
+            <div style="background:#EAEAEA;padding:8px 10px;display:flex;align-items:center;gap:6px;border-bottom:1px solid #000;">
+              <div style="width:6px;height:6px;background:#fa6519;border-radius:50%;"></div>
+              <div style="width:6px;height:6px;background:#000;border-radius:50%;opacity:0.3;"></div>
+              <div style="width:6px;height:6px;background:#000;border-radius:50%;opacity:0.3;"></div>
+              <div style="margin-left:8px;background:#fff;padding:4px 10px;font-size:10px;display:flex;align-items:center;gap:6px;border:1px solid #BDBDBD;">
+                <div style="width:8px;height:8px;background:{{ ctx.faviconBg }};display:flex;align-items:center;justify-content:center;"><div style="width:4px;height:4px;background:{{ ctx.faviconDot }};"></div></div>
+                <span style="font-family:'Inter';font-size:10px;font-weight:500;">{{ ctx.tab }}</span>
+              </div>
+            </div>
+            <!-- app nav -->
+            <div style="padding:18px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #EAEAEA;">
+              <div style="display:flex;align-items:center;gap:9px;">
+                <div style="width:14px;height:14px;background:{{ ctx.faviconBg }};display:flex;align-items:center;justify-content:center;"><div style="width:7px;height:7px;background:{{ ctx.faviconDot }};"></div></div>
+                <span style="font-family:{{ ctx.font }};font-weight:{{ ctx.weight }};font-size:14px;letter-spacing:-0.02em;">{{ ctx.brand }}</span>
+              </div>
+              <span style="font-size:9px;font-family:'Inter';color:#fff;background:#000;padding:5px 8px;">Start →</span>
+            </div>
+            <!-- hero -->
+            <div style="padding:22px 16px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.12em;color:#fa6519;">PROOF OF SKILL</span>
+              <h3 style="font-family:'Newsreader',serif;font-weight:400;font-size:22px;letter-spacing:-0.02em;margin-top:8px;line-height:1.0;">{{ ctx.headline }}</h3>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ============ RECOMMENDATION ============ -->
+  <section style="max-width:760px;background:#000;color:#fff;padding:32px 36px;border:1px solid #000;position:relative;">
+    <div style="position:absolute;top:0;right:0;width:6px;height:100%;background:#fa6519;"></div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#fa6519;">04 · RECOMMENDATION</div>
+    <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:32px;letter-spacing:-0.02em;margin-top:12px;line-height:1.05;">My pick: <span style="font-style:italic;color:#fa6519;">Mettle</span> — with the wedge mark.</h2>
+    <p style="font-size:14px;line-height:1.6;opacity:0.75;margin-top:14px;">"Mettle" carries the same conviction as "SkillProof" without the literalness. It's a single, unusual word — easy domain story, brandable, and the mark scales from a 16px favicon to a t-shirt. <span style="color:#fa6519;font-style:italic;">Rubric</span> is the strongest dev/college-audience alternative if you want a more tool-like read; <span style="color:#fa6519;font-style:italic;">Caliber</span> is the safest if you want a name that already lives in workplace vocabulary.</p>
+  </section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1500}}">
+class Component extends DCLogic {
+  renderVals() {
+    const A = '#fa6519';
+    return {
+      names: [
+        { idx: '01', name: 'SkillProof',  tagline: 'CURRENT NAME',         rationale: 'Literal, descriptive. Reads instantly. Risk: a little plain, and the .com is taken in many TLDs.', domain: 'skillproof.io', tone: 'Literal',  toneColor: '#000', toneBg: '#EAEAEA' },
+        { idx: '02', name: 'Proven.',     tagline: 'EDITORIAL · CONFIDENT', rationale: 'A statement, not a label. The period does the work. Premium feel; harder to own as a single word.',  domain: 'proven.so',     tone: 'Editorial', toneColor: A,      toneBg: '#fff5ef' },
+        { idx: '03', name: 'Crucible',    tagline: 'METAPHOR · FORGED',     rationale: 'A vessel where things are tested under heat. Strong story, slightly literary — leans serious.',     domain: 'crucible.cc',   tone: 'Metaphor',  toneColor: '#000', toneBg: '#EAEAEA' },
+        { idx: '04', name: 'Caliber',     tagline: 'WORKPLACE · MEASURED',  rationale: 'Already lives in hiring language ("a candidate of her caliber"). Safe, professional, recognisable.', domain: 'caliber.work',  tone: 'Safe',      toneColor: '#000', toneBg: '#EAEAEA' },
+        { idx: '05', name: 'Mettle',      tagline: 'CHARACTER · UNFAKEABLE',rationale: 'Old word for unbreakable character under pressure. Short, unusual, brandable. My favorite.',         domain: 'mettle.dev',    tone: 'Brandable', toneColor: A,      toneBg: '#fff5ef' },
+        { idx: '06', name: 'Rubric',      tagline: 'TOOL-LIKE · STUDENT',   rationale: 'The grading criteria itself, owned. Reads dev-tool, college-friendly. Strong with your audience.',  domain: 'rubric.app',    tone: 'Tool',      toneColor: '#000', toneBg: '#EAEAEA' },
+      ],
+      contexts: [
+        { label: 'A · SKILLPROOF', tab: 'SkillProof — verified', brand: 'SkillProof', font: "'Inter',sans-serif", weight: 700, faviconBg: '#000', faviconDot: A, headline: 'Prove the skill, not the certificate.' },
+        { label: 'B · PROVEN',     tab: 'Proven.',               brand: 'Proven.',    font: "'Newsreader',serif",  weight: 400, faviconBg: '#000', faviconDot: A, headline: 'Proven, not promised.' },
+        { label: 'C · CRUCIBLE',   tab: 'Crucible — proof of skill', brand: 'Crucible', font: "'Instrument Serif',serif", weight: 400, faviconBg: '#000', faviconDot: A, headline: 'Skills are forged. Then verified.' },
+        { label: 'D · CALIBER',    tab: 'caliber',               brand: 'caliber',    font: "'Inter',sans-serif", weight: 800, faviconBg: '#000', faviconDot: A, headline: 'Show your caliber. In detail.' },
+        { label: 'E · METTLE',     tab: 'Mettle — proof of skill', brand: 'Mettle',   font: "'Newsreader',serif",  weight: 400, faviconBg: '#000', faviconDot: A, headline: 'Skills tested under pressure.' },
+        { label: 'F · RUBRIC',     tab: 'rubric/',               brand: 'rubric',     font: "'JetBrains Mono',monospace", weight: 600, faviconBg: '#000', faviconDot: A, headline: 'Your work, against the rubric.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

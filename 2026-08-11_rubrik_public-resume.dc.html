@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#EAEAEA;color:#000;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;padding:32px 0;}
+  @media print { body { background:#fff; padding:0; } .no-print { display:none !important; } .page { box-shadow:none !important; } }
+</style>
+</helmet>
+
+<!-- TOP NAV (non-print) -->
+<nav class="no-print" style="max-width:1180px;margin:0 auto 28px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;">
+  <a href="2026-08-11_rubrik_landing-page.dc.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#000;">
+    <svg width="36.4" height="23.400000000000002" viewBox="-60 -32 120 64" style="overflow:visible;"><path d="M -48 14 Q -36 -22 -20 -6 Q -8 14 -22 22 Q -32 22 -20 8 Q -4 -18 12 0 Q 28 18 14 24 Q 4 24 16 12 Q 28 -6 44 4 Q 56 16 50 24" fill="none" stroke="#fa6519" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span style="font-family:'Newsreader',serif;font-style:italic;font-size:22px;letter-spacing:-0.01em;">rubrik<span style="color:#fa6519;">.</span></span>
+  </a>
+  <div style="display:flex;align-items:center;gap:14px;">
+    <a href="2026-08-11_rubrik_skill-picker.dc.html" style="font-size:13px;font-weight:500;color:#000;background:#fff;border:1px solid #000;padding:10px 18px;text-decoration:none;">+ Verify a new skill</a>
+    <button style="font-size:13px;font-weight:500;color:#000;background:#fff;border:1px solid #EAEAEA;padding:10px 16px;cursor:pointer;white-space:nowrap;">Share link</button>
+    <button onclick="window.print()" style="font-size:13px;font-weight:500;color:#fff;background:#000;border:1px solid #000;padding:10px 16px;cursor:pointer;white-space:nowrap;">Print / PDF</button>
+  </div>
+</nav>
+
+<!-- PRINTABLE PAGE -->
+<div class="page" style="max-width:880px;margin:0 auto;background:#fff;padding:56px 56px 48px;box-shadow:0 1px 3px rgba(0,0,0,0.06);position:relative;">
+
+  <!-- attestation strip -->
+  <div style="position:absolute;top:0;left:0;width:100%;height:6px;background:#fa6519;"></div>
+
+  <!-- HEADER -->
+  <header style="display:grid;grid-template-columns:1fr auto;gap:32px;align-items:end;padding-bottom:28px;border-bottom:2px solid #000;">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.16em;color:#fa6519;font-weight:600;">VERIFIED RÉSUMÉ · RUBRIK</span>
+        <span style="display:inline-flex;align-items:center;gap:5px;background:#fa6519;color:#fff;padding:2px 7px;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;">
+          <span style="width:4px;height:4px;background:#fff;border-radius:50%;"></span>CURRENT
+        </span>
+      </div>
+      <h1 style="font-family:'Newsreader',serif;font-weight:400;font-size:52px;letter-spacing:-0.025em;line-height:1;">Dana <span style="font-style:italic;">Okonkwo</span></h1>
+      <p style="font-size:15px;color:#000;opacity:0.72;margin-top:10px;line-height:1.5;">Senior Data Engineer · Lagos / Remote · she/her<br>dana@okonkwo.io  ·  skillproof.io/dana-okonkwo</p>
+    </div>
+    <div style="text-align:right;">
+      <div style="width:80px;height:80px;background:#fa6519;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Newsreader',serif;font-style:italic;font-size:36px;margin-left:auto;">DO</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;color:#000;opacity:0.5;margin-top:8px;">SP-94F2-DK17</div>
+    </div>
+  </header>
+
+  <!-- STATEMENT -->
+  <section style="padding:24px 0;border-bottom:1px solid #EAEAEA;">
+    <p style="font-family:'Newsreader',serif;font-size:21px;line-height:1.4;letter-spacing:-0.01em;text-wrap:pretty;">
+      Data engineer with <span style="background:#fff5ef;padding:0 4px;">7 SkillProof-verified competencies</span> across modeling, distributed systems, and written explanation. Every claim on this page links to a recorded challenge round — <span style="font-style:italic;color:#fa6519;">no self-reporting</span>.
+    </p>
+  </section>
+
+  <!-- STATS BAND -->
+  <section style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#EAEAEA;border-bottom:1px solid #EAEAEA;">
+    <sc-for list="{{ stats }}" as="st" hint-placeholder-count="4">
+      <div style="background:#fff;padding:20px 16px;text-align:center;">
+        <div style="font-family:'Newsreader',serif;font-size:34px;line-height:1;color:{{ st.color }};letter-spacing:-0.02em;">{{ st.value }}</div>
+        <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:#000;opacity:0.55;margin-top:7px;font-weight:500;">{{ st.label }}</div>
+      </div>
+    </sc-for>
+  </section>
+
+  <!-- VERIFIED SKILLS -->
+  <section style="padding:28px 0 24px;border-bottom:1px solid #EAEAEA;">
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px;">
+      <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:24px;letter-spacing:-0.015em;">Verified skills</h2>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.5;">7 ENTRIES · 42 ROUNDS</span>
+    </div>
+    <div style="display:flex;flex-direction:column;">
+      <sc-for list="{{ skills }}" as="s" hint-placeholder-count="7">
+        <div style="display:grid;grid-template-columns:1fr 160px auto;gap:18px;align-items:center;padding:14px 0;border-top:1px solid #EAEAEA;">
+          <div style="display:flex;flex-direction:column;gap:4px;min-width:0;">
+            <div style="display:flex;align-items:baseline;gap:10px;">
+              <span style="font-size:15px;font-weight:600;letter-spacing:-0.01em;">{{ s.skill }}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;color:#000;opacity:0.45;">{{ s.id }}</span>
+            </div>
+            <div style="font-size:11px;color:#000;opacity:0.6;line-height:1.5;">Verified {{ s.date }} · {{ s.rounds }} rounds · {{ s.score }} · re-verified {{ s.re }}</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;">
+            <sc-for list="{{ s.bars }}" as="b" hint-placeholder-count="4">
+              <div style="width:24px;height:6px;background:{{ b }};"></div>
+            </sc-for>
+          </div>
+          <span style="font-size:12px;font-weight:700;min-width:96px;text-align:right;letter-spacing:-0.01em;text-transform:uppercase;color:{{ s.levelColor }};">{{ s.level }}</span>
+        </div>
+      </sc-for>
+      <div style="border-top:1px solid #EAEAEA;"></div>
+    </div>
+  </section>
+
+  <!-- STRENGTHS RADAR + ENDORSEMENTS -->
+  <section style="display:grid;grid-template-columns:1fr 1fr;gap:32px;padding:28px 0 24px;border-bottom:1px solid #EAEAEA;">
+
+    <!-- Radar -->
+    <div>
+      <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:24px;letter-spacing:-0.015em;margin-bottom:14px;">Strengths breakdown</h2>
+      <div style="position:relative;width:100%;aspect-ratio:1/1;max-width:320px;margin:0 auto;">
+        <svg viewBox="-150 -150 300 300" style="width:100%;height:100%;">
+          <!-- rings -->
+          <polygon points="0,-120 103.92,-60 103.92,60 0,120 -103.92,60 -103.92,-60" fill="none" stroke="#EAEAEA" stroke-width="1"></polygon>
+          <polygon points="0,-90 77.94,-45 77.94,45 0,90 -77.94,45 -77.94,-45" fill="none" stroke="#EAEAEA" stroke-width="1"></polygon>
+          <polygon points="0,-60 51.96,-30 51.96,30 0,60 -51.96,30 -51.96,-30" fill="none" stroke="#EAEAEA" stroke-width="1"></polygon>
+          <polygon points="0,-30 25.98,-15 25.98,15 0,30 -25.98,15 -25.98,-15" fill="none" stroke="#EAEAEA" stroke-width="1"></polygon>
+          <!-- axes -->
+          <line x1="0" y1="-120" x2="0" y2="120" stroke="#EAEAEA" stroke-width="1"></line>
+          <line x1="-103.92" y1="-60" x2="103.92" y2="60" stroke="#EAEAEA" stroke-width="1"></line>
+          <line x1="-103.92" y1="60" x2="103.92" y2="-60" stroke="#EAEAEA" stroke-width="1"></line>
+          <!-- data shape: values 92, 88, 84, 95, 78, 90 (out of 100, max ring=120) -->
+          <polygon points="0,-110.4 91.55,-52.8 87.65,50.4 0,114 -81.16,46.8 -93.53,-54" fill="rgba(250,101,25,0.18)" stroke="#fa6519" stroke-width="2"></polygon>
+          <!-- vertices -->
+          <circle cx="0" cy="-110.4" r="3.5" fill="#fa6519"></circle>
+          <circle cx="91.55" cy="-52.8" r="3.5" fill="#fa6519"></circle>
+          <circle cx="87.65" cy="50.4" r="3.5" fill="#fa6519"></circle>
+          <circle cx="0" cy="114" r="3.5" fill="#fa6519"></circle>
+          <circle cx="-81.16" cy="46.8" r="3.5" fill="#fa6519"></circle>
+          <circle cx="-93.53" cy="-54" r="3.5" fill="#fa6519"></circle>
+          <!-- labels -->
+          <text x="0" y="-134" text-anchor="middle" font-family="Inter" font-size="10" font-weight="600" fill="#000">REASONING</text>
+          <text x="120" y="-66" text-anchor="start" font-family="Inter" font-size="10" font-weight="600" fill="#000">APPLICATION</text>
+          <text x="120" y="74" text-anchor="start" font-family="Inter" font-size="10" font-weight="600" fill="#000">CLARITY</text>
+          <text x="0" y="138" text-anchor="middle" font-family="Inter" font-size="10" font-weight="600" fill="#000">ADAPTATION</text>
+          <text x="-120" y="74" text-anchor="end" font-family="Inter" font-size="10" font-weight="600" fill="#000">TRANSFER</text>
+          <text x="-120" y="-66" text-anchor="end" font-family="Inter" font-size="10" font-weight="600" fill="#000">AUTHENTICITY</text>
+        </svg>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 18px;margin-top:14px;font-size:11px;">
+        <sc-for list="{{ dimScores }}" as="ds" hint-placeholder-count="6">
+          <div style="display:flex;justify-content:space-between;border-bottom:1px dashed #EAEAEA;padding:4px 0;">
+            <span style="color:#000;opacity:0.7;">{{ ds.name }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:#fa6519;">{{ ds.val }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- Endorsements + Re-verification cadence -->
+    <div style="display:flex;flex-direction:column;gap:24px;">
+      <div>
+        <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:24px;letter-spacing:-0.015em;margin-bottom:14px;">Endorsements</h2>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <sc-for list="{{ endorsements }}" as="e" hint-placeholder-count="2">
+            <blockquote style="border-left:3px solid #fa6519;padding:6px 0 6px 14px;">
+              <p style="font-family:'Newsreader',serif;font-size:15px;line-height:1.45;font-style:italic;">"{{ e.quote }}"</p>
+              <footer style="margin-top:8px;font-size:11px;color:#000;opacity:0.65;">— {{ e.name }}, {{ e.role }} · <span style="font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;">{{ e.proctor }}</span></footer>
+            </blockquote>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:24px;letter-spacing:-0.015em;margin-bottom:12px;">Re-verification cadence</h2>
+        <p style="font-size:12px;color:#000;opacity:0.65;line-height:1.5;margin-bottom:14px;">Skills decay. Each is auto-flagged for re-verification — keeping this résumé honest.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <sc-for list="{{ cadence }}" as="c" hint-placeholder-count="4">
+            <div style="display:grid;grid-template-columns:1fr 80px 90px;gap:10px;align-items:center;padding:8px 12px;background:{{ c.bg }};border:1px solid #EAEAEA;">
+              <span style="font-size:12px;font-weight:500;">{{ c.skill }}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#000;opacity:0.6;letter-spacing:0.04em;">{{ c.due }}</span>
+              <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:{{ c.statusColor }};text-align:right;">{{ c.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY TIMELINE -->
+  <section style="padding:28px 0 24px;border-bottom:1px solid #EAEAEA;">
+    <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:24px;letter-spacing:-0.015em;margin-bottom:18px;">Verification history</h2>
+    <div style="display:flex;flex-direction:column;">
+      <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
+        <div style="display:grid;grid-template-columns:80px 1fr auto;gap:18px;padding:12px 0;border-top:1px solid #EAEAEA;align-items:start;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.6;letter-spacing:0.04em;">{{ h.when }}</span>
+          <div style="display:flex;flex-direction:column;gap:3px;">
+            <span style="font-size:13px;font-weight:600;">{{ h.title }}</span>
+            <span style="font-size:11px;color:#000;opacity:0.62;line-height:1.5;">{{ h.detail }}</span>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;padding:3px 8px;background:{{ h.tagBg }};color:{{ h.tagFg }};text-transform:uppercase;font-weight:600;">{{ h.tag }}</span>
+        </div>
+      </sc-for>
+      <div style="border-top:1px solid #EAEAEA;"></div>
+    </div>
+  </section>
+
+  <!-- ATTESTATION FOOTER -->
+  <footer style="padding:24px 0 0;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.6;line-height:1.7;">
+      ATTESTATION · SP-94F2-DK17  ·  ISSUED 14 MAY 2026  ·  VALID · CURRENT<br>
+      VERIFY · skillproof.io/v/dana-okonkwo  ·  CHALLENGE LOG IMMUTABLE
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <svg width="50.4" height="32.4" viewBox="-60 -32 120 64" style="overflow:visible;"><path d="M -48 14 Q -36 -22 -20 -6 Q -8 14 -22 22 Q -32 22 -20 8 Q -4 -18 12 0 Q 28 18 14 24 Q 4 24 16 12 Q 28 -6 44 4 Q 56 16 50 24" fill="none" stroke="#fa6519" stroke-width="14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div style="display:flex;flex-direction:column;gap:1px;">
+        <span style="font-family:'Newsreader',serif;font-style:italic;font-size:14px;">rubrik.</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#000;opacity:0.55;letter-spacing:0.06em;">VERIFIED · NOT CERTIFIED</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+
+
+<!-- RUBI · CORNER · BEGRUDGING -->
+<div class="no-print" style="position:fixed;bottom:24px;right:24px;display:flex;align-items:flex-end;gap:12px;z-index:50;font-family:'Inter',sans-serif;">
+  <div style="background:#fa6519;color:#000;padding:12px 14px;max-width:240px;border:2px solid #000;font-family:'Newsreader',serif;font-size:14px;line-height:1.35;position:relative;box-shadow:4px 4px 0 rgba(0,0,0,0.15);">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;color:#000;font-weight:600;font-style:normal;">RUBI · STAMPING</span>
+    <p style="margin-top:4px;font-style:italic;">"Fine. Your <span style="font-weight:600;">receipts.</span> Don't lose them."</p>
+    <div style="position:absolute;right:-10px;bottom:18px;width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:10px solid #000;"></div>
+  </div>
+  <svg width="64" height="72" viewBox="0 0 180 200" style="filter:drop-shadow(3px 3px 0 rgba(0,0,0,0.12));">
+    <path d="M40 70 Q40 22 90 22 Q140 22 140 70 Q140 118 90 118 Q40 118 40 70 Z" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="74" cy="78" r="4.5" fill="#000"/>
+    <circle cx="106" cy="78" r="4.5" fill="#000"/>
+    <path d="M76 95 Q90 100 104 95" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M44 95 Q26 130 50 168" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M136 95 Q160 80 152 40" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="138" y="14" width="32" height="14" fill="#000"/>
+    <rect x="142" y="2" width="24" height="14" fill="#fa6519" stroke="#000" stroke-width="2"/>
+  </svg>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1100}}">
+class Component extends DCLogic {
+  renderVals() {
+    const A = '#fa6519', M = '#BDBDBD', G = '#EAEAEA';
+    return {
+      stats: [
+        { value: '7',   label: 'Verified skills',  color: A },
+        { value: '42',  label: 'Challenge rounds', color: '#000' },
+        { value: '94%', label: 'Pass rate',        color: '#000' },
+        { value: 'L4',  label: 'Highest level',    color: A },
+      ],
+      skills: [
+        { skill: 'SQL & Data Modeling',       id: 'SP-001', date: 'May 2026', rounds: 8, score: '96/100', re: 'Apr 2027', bars: [A,A,A,A], level: 'Expert',       levelColor: A },
+        { skill: 'Distributed Systems',       id: 'SP-014', date: 'Apr 2026', rounds: 7, score: '91/100', re: 'Mar 2027', bars: [A,A,A,A], level: 'Expert',       levelColor: A },
+        { skill: 'Technical Writing',         id: 'SP-027', date: 'Mar 2026', rounds: 6, score: '88/100', re: 'Sep 2026', bars: [A,A,A,G], level: 'Advanced',     levelColor: A },
+        { skill: 'Systems Design',            id: 'SP-033', date: 'Feb 2026', rounds: 6, score: '82/100', re: 'Aug 2026', bars: [A,A,A,G], level: 'Advanced',     levelColor: A },
+        { skill: 'Python for Data',           id: 'SP-042', date: 'Jan 2026', rounds: 5, score: '79/100', re: 'Jul 2026', bars: [A,A,G,G], level: 'Intermediate', levelColor: '#000' },
+        { skill: 'Stakeholder Communication', id: 'SP-051', date: 'Dec 2025', rounds: 5, score: '74/100', re: 'Jun 2026', bars: [A,A,G,G], level: 'Intermediate', levelColor: '#000' },
+        { skill: 'Rust Fundamentals',         id: 'SP-068', date: 'Nov 2025', rounds: 5, score: '68/100', re: 'May 2026', bars: [A,G,G,G], level: 'Beginner',     levelColor: '#000' },
+      ],
+      dimScores: [
+        { name: 'Reasoning',    val: '92' },
+        { name: 'Application',  val: '88' },
+        { name: 'Clarity',      val: '84' },
+        { name: 'Adaptation',   val: '95' },
+        { name: 'Transfer',     val: '78' },
+        { name: 'Authenticity', val: '90' },
+      ],
+      endorsements: [
+        { quote: 'Defended trade-offs cleanly under pressure. The adapt round was the most honest I have proctored this quarter.', name: 'Amara Iyer', role: 'Principal Data Engineer', proctor: 'L5 PROCTOR · SP-CERT-019' },
+        { quote: 'Voice round was unusually clear — no jargon, real analogies, ran with a follow-up I threw mid-recording.',     name: 'Tomás Reyes',  role: 'Staff Engineer',          proctor: 'L4 REVIEWER · SP-CERT-204' },
+      ],
+      cadence: [
+        { skill: 'Rust Fundamentals',          due: 'in 12 days', status: 'Due soon',  statusColor: A,      bg: '#fff5ef' },
+        { skill: 'Stakeholder Communication',  due: 'in 38 days', status: 'Upcoming',  statusColor: '#000', bg: '#fff' },
+        { skill: 'Python for Data',            due: 'in 72 days', status: 'Upcoming',  statusColor: '#000', bg: '#fff' },
+        { skill: 'Systems Design',             due: 'in 90 days', status: 'Upcoming',  statusColor: '#000', bg: '#fff' },
+      ],
+      history: [
+        { when: '12 JUN', title: 'Distributed Systems — Round 7',       detail: 'Consensus & partition tolerance, L4 adapt round.', tag: 'Passed',  tagBg: 'rgba(250,101,25,0.15)', tagFg: A },
+        { when: '04 JUN', title: 'Technical Writing — Re-verification', detail: 'Maintained Advanced. Re-cleared L3 reasoning.',    tag: 'Renewed', tagBg: '#000',                  tagFg: '#fff' },
+        { when: '29 MAY', title: 'SQL — Round 8',                       detail: 'Window functions, query plan defence.',            tag: 'Passed',  tagBg: 'rgba(250,101,25,0.15)', tagFg: A },
+        { when: '17 MAY', title: 'Rust Fundamentals — Round 5',         detail: 'L2 application reached. L3 attempted, retry advised.', tag: 'Partial', tagBg: '#EAEAEA',           tagFg: '#000' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

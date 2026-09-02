@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400;1,6..72,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#F8F6F2;color:#000;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  .pill:hover{background:#000 !important;color:#fff !important;}
+  .skillcard:hover{transform:translate(-3px,-3px);box-shadow:6px 6px 0 #000;}
+  .skillcard{transition:transform .15s ease,box-shadow .15s ease;}
+</style>
+</helmet>
+
+<div style="max-width:1180px;margin:0 auto;padding:0 40px;">
+
+  <!-- NAV -->
+  <nav style="display:flex;align-items:center;justify-content:space-between;height:88px;border-bottom:1px solid #EAEAEA;">
+    <a href="2026-08-11_rubrik_landing-page.dc.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:#000;">
+      <svg width="36.4" height="23.400000000000002" viewBox="-60 -32 120 64" style="overflow:visible;"><path d="M -48 14 Q -36 -22 -20 -6 Q -8 14 -22 22 Q -32 22 -20 8 Q -4 -18 12 0 Q 28 18 14 24 Q 4 24 16 12 Q 28 -6 44 4 Q 56 16 50 24" fill="none" stroke="#fa6519" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-family:'Newsreader',serif;font-style:italic;font-size:22px;letter-spacing:-0.01em;">rubrik<span style="color:#fa6519;">.</span></span>
+    </a>
+    <div style="display:flex;align-items:center;gap:40px;">
+      <a href="2026-08-11_rubrik_skill-picker.dc.html" style="font-size:14px;font-weight:600;color:#000;text-decoration:none;border-bottom:2px solid #fa6519;padding-bottom:6px;">Skills</a>
+      <a href="2026-08-11_rubrik_public-resume.dc.html" style="font-size:14px;color:#000;text-decoration:none;opacity:0.7;">Résumé</a>
+      <a href="2026-08-11_rubrik_assessment-session.dc.html" style="font-size:14px;font-weight:500;color:#fff;background:#000;text-decoration:none;padding:11px 20px;">Start a round</a>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <header style="padding:80px 0 56px;display:grid;grid-template-columns:1.4fr 1fr;gap:64px;align-items:end;">
+    <div>
+      <div style="display:inline-flex;align-items:center;gap:8px;background:#000;color:#fff;padding:7px 12px;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;margin-bottom:28px;">
+        <span style="width:6px;height:6px;background:#fa6519;border-radius:50%;"></span>Step 01 — Pick a skill
+      </div>
+      <h1 style="font-family:'Newsreader',serif;font-weight:400;font-size:80px;line-height:0.95;letter-spacing:-0.025em;text-wrap:balance;">
+        What do you actually <span style="font-style:italic;color:#fa6519;">know</span>?
+      </h1>
+      <p style="font-size:18px;line-height:1.55;color:#000;opacity:0.66;max-width:520px;margin-top:28px;">
+        Pick one to verify. Each skill has its own challenge format — canvas, voice note, code, debate. No multiple-choice anywhere.
+      </p>
+    </div>
+    <!-- Funky sticker block -->
+    <div style="display:flex;justify-content:flex-end;gap:14px;align-items:flex-end;">
+      <div style="background:#fa6519;color:#fff;padding:14px 16px;transform:rotate(-3deg);">
+        <div style="font-family:'Newsreader',serif;font-style:italic;font-size:24px;line-height:1;">no fluff</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;margin-top:6px;">JUST PROOF →</div>
+      </div>
+      <div style="background:#000;color:#fff;padding:14px 16px;transform:rotate(2deg);">
+        <div style="font-family:'Newsreader',serif;font-style:italic;font-size:24px;line-height:1;">~30 min</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;margin-top:6px;">PER SKILL</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- FILTER BAR -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px;background:#fff;border:1px solid #EAEAEA;margin-bottom:32px;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <sc-for list="{{ categories }}" as="c" hint-placeholder-count="6">
+        <span class="pill" style="font-size:13px;font-weight:500;padding:8px 14px;background:{{ c.bg }};color:{{ c.fg }};border:1px solid {{ c.border }};cursor:pointer;">{{ c.label }}</span>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.5;letter-spacing:0.04em;">SHOWING 12 OF 84</span>
+      <select style="font-size:13px;font-family:'Inter',sans-serif;padding:8px 12px;background:#fff;border:1px solid #EAEAEA;color:#000;">
+        <option>Most popular</option>
+        <option>Newest</option>
+        <option>Hardest</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- SKILL GRID -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:18px;">
+    <sc-for list="{{ skills }}" as="s" hint-placeholder-count="9">
+      <a href="2026-08-11_rubrik_assessment-session.dc.html" class="skillcard" style="text-decoration:none;color:#000;background:#fff;border:1px solid #000;padding:24px;display:flex;flex-direction:column;gap:18px;min-height:240px;">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#000;opacity:0.55;">{{ s.id }}</span>
+          <span style="font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:{{ s.tagColor }};background:{{ s.tagBg }};padding:4px 8px;">{{ s.format }}</span>
+        </div>
+        <div>
+          <h3 style="font-family:'Newsreader',serif;font-weight:400;font-size:30px;letter-spacing:-0.02em;line-height:1.05;margin-bottom:8px;">{{ s.name }}</h3>
+          <p style="font-size:13px;line-height:1.5;color:#000;opacity:0.62;">{{ s.blurb }}</p>
+        </div>
+        <div style="margin-top:auto;display:flex;align-items:center;justify-content:space-between;padding-top:14px;border-top:1px dashed #EAEAEA;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.65;">{{ s.duration }}</span>
+            <span style="opacity:0.3;">·</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.65;">{{ s.takers }} verified</span>
+          </div>
+          <span style="font-size:13px;font-weight:600;color:#fa6519;">Start →</span>
+        </div>
+      </a>
+    </sc-for>
+  </div>
+
+  <!-- LEVELS NOTE -->
+  <section style="margin:80px 0 40px;background:#000;color:#fff;padding:48px;display:grid;grid-template-columns:1fr 1.4fr;gap:48px;align-items:start;">
+    <div>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#fa6519;">VERIFICATION LEVELS</span>
+      <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:36px;letter-spacing:-0.02em;margin-top:14px;line-height:1.05;">Five levels.<br>AI judges four.<br><span style="font-style:italic;color:#fa6519;">Humans judge the fifth.</span></h2>
+    </div>
+    <div style="display:flex;flex-direction:column;">
+      <sc-for list="{{ levelTiers }}" as="t" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:40px 130px 1fr auto;gap:20px;padding:18px 0;border-top:1px solid rgba(255,255,255,0.12);align-items:center;">
+          <span style="font-family:'Newsreader',serif;font-size:22px;color:#fff;opacity:0.4;">{{ t.idx }}</span>
+          <span style="font-size:15px;font-weight:600;letter-spacing:-0.01em;">{{ t.name }}</span>
+          <span style="font-size:13px;line-height:1.5;color:#fff;opacity:0.65;">{{ t.body }}</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:{{ t.judgeColor }};padding:5px 9px;border:1px solid {{ t.judgeColor }};">{{ t.judge }}</span>
+        </div>
+      </sc-for>
+      <div style="border-top:1px solid rgba(255,255,255,0.12);"></div>
+    </div>
+  </section>
+
+  <footer style="display:flex;align-items:center;justify-content:space-between;padding:40px 0;border-top:1px solid #EAEAEA;margin-top:40px;">
+    <a href="2026-08-11_rubrik_landing-page.dc.html" style="display:flex;align-items:center;gap:9px;text-decoration:none;color:#000;">
+      <svg width="25.2" height="16.2" viewBox="-60 -32 120 64" style="overflow:visible;"><path d="M -48 14 Q -36 -22 -20 -6 Q -8 14 -22 22 Q -32 22 -20 8 Q -4 -18 12 0 Q 28 18 14 24 Q 4 24 16 12 Q 28 -6 44 4 Q 56 16 50 24" fill="none" stroke="#fa6519" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-family:'Newsreader',serif;font-style:italic;font-size:16px;">rubrik.</span>
+    </a>
+    <span style="font-size:13px;color:#000;opacity:0.45;">Verified skills, not credentials.</span>
+  </footer>
+
+</div>
+
+
+<!-- RUBI · CORNER -->
+<div style="position:fixed;bottom:24px;right:24px;display:flex;align-items:flex-end;gap:12px;z-index:50;font-family:'Inter',sans-serif;">
+  <div style="background:#fa6519;color:#000;padding:12px 14px;max-width:240px;border:2px solid #000;font-family:'Newsreader',serif;font-size:14px;line-height:1.35;position:relative;box-shadow:4px 4px 0 rgba(0,0,0,0.15);">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;color:#000;font-weight:600;font-style:normal;">RUBI · POINTED</span>
+    <p style="margin-top:4px;font-style:italic;">"Pick one. <span style="font-weight:600;">Out loud.</span>"</p>
+    <div style="position:absolute;right:-10px;bottom:18px;width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:10px solid #000;"></div>
+  </div>
+  <svg width="64" height="72" viewBox="0 0 180 200" style="filter:drop-shadow(3px 3px 0 rgba(0,0,0,0.12));">
+    <path d="M40 70 Q40 22 90 22 Q140 22 140 70 Q140 118 90 118 Q40 118 40 70 Z" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="74" cy="78" r="4.5" fill="#000"/>
+    <circle cx="106" cy="78" r="4.5" fill="#000"/>
+    <path d="M75 95 Q90 92 105 95" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M44 95 Q26 130 50 168" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M136 95 Q160 70 156 26" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <circle cx="156" cy="22" r="6" fill="#fa6519" stroke="#000" stroke-width="2.5"/>
+  </svg>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1260}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      categories: [
+        { label: 'All',         bg: '#000', fg: '#fff', border: '#000' },
+        { label: 'Design',      bg: '#fff', fg: '#000', border: '#EAEAEA' },
+        { label: 'Engineering', bg: '#fff', fg: '#000', border: '#EAEAEA' },
+        { label: 'Data',        bg: '#fff', fg: '#000', border: '#EAEAEA' },
+        { label: 'Writing',     bg: '#fff', fg: '#000', border: '#EAEAEA' },
+        { label: 'Theory',      bg: '#fff', fg: '#000', border: '#EAEAEA' },
+        { label: 'Communication', bg: '#fff', fg: '#000', border: '#EAEAEA' },
+      ],
+      skills: [
+        { id: 'SP-DSG-01', format: 'Canvas',     tagBg: '#fff5ef', tagColor: '#fa6519', name: 'Visual layout & composition', blurb: 'Arrange given elements with balance, hierarchy, and rhythm. Then adapt under a new prompt.', duration: '~35 min', takers: '4.2k' },
+        { id: 'SP-THY-09', format: 'Voice note', tagBg: '#f0eee9', tagColor: '#000',    name: 'Explain TCP to a 12-year-old', blurb: 'Theoretical concepts get a voice round — judged on authenticity, accuracy, and clarity.', duration: '~20 min', takers: '2.8k' },
+        { id: 'SP-ENG-04', format: 'Code',       tagBg: '#fff5ef', tagColor: '#fa6519', name: 'SQL query optimization',       blurb: 'Read an execution plan. Rewrite the query. Defend the trade-offs.', duration: '~40 min', takers: '6.1k' },
+        { id: 'SP-DSG-07', format: 'Canvas',     tagBg: '#fff5ef', tagColor: '#fa6519', name: 'Typography & hierarchy',       blurb: 'Set body, display, and supporting text. Then re-set for a different audience.', duration: '~30 min', takers: '1.9k' },
+        { id: 'SP-WRT-02', format: 'Written',    tagBg: '#f0eee9', tagColor: '#000',    name: 'Technical writing',           blurb: 'Explain something hard, in plain language, with the constraints we give you.', duration: '~45 min', takers: '3.7k' },
+        { id: 'SP-THY-12', format: 'Voice note', tagBg: '#f0eee9', tagColor: '#000',    name: 'What is recursion, really?',  blurb: 'Define it. Apply it. Explain the trade-offs against iteration — in your own voice.', duration: '~18 min', takers: '2.1k' },
+        { id: 'SP-DAT-03', format: 'Canvas',     tagBg: '#fff5ef', tagColor: '#fa6519', name: 'Schema design',               blurb: 'Model a real domain on a blank canvas. Justify keys, normalization, and access patterns.', duration: '~45 min', takers: '2.6k' },
+        { id: 'SP-COM-05', format: 'Debate',     tagBg: '#fff5ef', tagColor: '#fa6519', name: 'Stakeholder communication',   blurb: 'Live scenario. We push back. You respond. Judged on framing, evidence, and tone.', duration: '~25 min', takers: '1.4k' },
+        { id: 'SP-THY-21', format: 'Voice note', tagBg: '#f0eee9', tagColor: '#000',    name: 'Why does CSS specificity work?', blurb: 'Theory check: derive the rules without looking. Then apply to a tricky cascade.', duration: '~22 min', takers: '980' },
+      ],
+      levelTiers: [
+        { idx: 'L1', name: 'Recall',           body: 'You can identify and name the core ideas correctly.',                     judge: 'AI',     judgeColor: '#fa6519' },
+        { idx: 'L2', name: 'Application',      body: 'You can apply the skill to a well-defined problem.',                     judge: 'AI',     judgeColor: '#fa6519' },
+        { idx: 'L3', name: 'Reasoning',        body: 'You can explain why, defend trade-offs, and reason from first principles.', judge: 'AI',     judgeColor: '#fa6519' },
+        { idx: 'L4', name: 'Adaptation',       body: 'You can transfer the skill — adapt under new prompts and constraints.',     judge: 'AI + review', judgeColor: '#fff' },
+        { idx: 'L5', name: 'Mastery',          body: 'Live proctored session with a domain expert. Highest signal, slower path.', judge: 'Human',  judgeColor: '#fff' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:#F8F6F2;color:#000;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.35;}}
+  @keyframes wave{0%,100%{transform:scaleY(0.3);}50%{transform:scaleY(1);}}
+  .wavebar{animation:wave 1.1s ease-in-out infinite;transform-origin:center;}
+  .rec-dot{animation:pulse 1.4s ease-in-out infinite;}
+</style>
+</helmet>
+
+<!-- TOP STATUS BAR -->
+<header style="background:#000;color:#fff;border-bottom:1px solid #000;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;">
+  <div style="display:flex;align-items:center;gap:28px;">
+    <a href="2026-08-11_rubrik_landing-page.dc.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;">
+      <svg width="28" height="18" viewBox="-60 -32 120 64" style="overflow:visible;"><path d="M -48 14 Q -36 -22 -20 -6 Q -8 14 -22 22 Q -32 22 -20 8 Q -4 -18 12 0 Q 28 18 14 24 Q 4 24 16 12 Q 28 -6 44 4 Q 56 16 50 24" fill="none" stroke="#fa6519" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-family:'Newsreader',serif;font-style:italic;font-size:18px;">rubrik.</span>
+    </a>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#fff;opacity:0.5;">SESSION · SP-94F2-DK17</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:18px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;">
+    <span style="color:#fff;opacity:0.55;">AUTOSAVED · 14:22</span>
+    <span style="display:flex;align-items:center;gap:7px;color:#fa6519;"><span class="rec-dot" style="width:7px;height:7px;background:#fa6519;border-radius:50%;"></span>SESSION LIVE</span>
+    <a href="2026-08-11_rubrik_public-resume.dc.html" style="color:#fff;opacity:0.55;text-decoration:none;">Save & exit →</a>
+  </div>
+</header>
+
+<!-- DEMO TABS -->
+<div style="background:#fff;border-bottom:1px solid #EAEAEA;padding:0 28px;display:flex;gap:0;">
+  <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="2">
+    <div style="padding:18px 24px;display:flex;align-items:center;gap:10px;border-bottom:2px solid {{ t.border }};color:{{ t.color }};cursor:pointer;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;opacity:0.65;">{{ t.code }}</span>
+      <span style="font-size:14px;font-weight:600;">{{ t.label }}</span>
+      <span style="font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;padding:3px 7px;background:{{ t.badgeBg }};color:{{ t.badgeFg }};">{{ t.badge }}</span>
+    </div>
+  </sc-for>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.55;">
+    <span>SCORING HIDDEN UNTIL END · ANTI-GAMING</span>
+  </div>
+</div>
+
+<!-- ========== DEMO 1 · DESIGN CANVAS ROUND ========== -->
+<section data-screen-label="Design — Canvas Round" style="padding:32px 28px 56px;border-bottom:1px solid #EAEAEA;">
+
+  <!-- Round header -->
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;gap:32px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#fa6519;">ROUND 02 / 04 · ADAPTATION</span>
+        <span style="font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;padding:3px 7px;background:rgba(250,101,25,0.18);color:#fa6519;">L4 · ADAPT</span>
+      </div>
+      <h1 style="font-family:'Newsreader',serif;font-weight:400;font-size:48px;line-height:1.0;letter-spacing:-0.02em;max-width:780px;">
+        Compose a poster for a campus film fest. <span style="font-style:italic;color:#fa6519;">Then we'll change the brief.</span>
+      </h1>
+    </div>
+    <!-- Timer (visible because this is the adapt round) -->
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#000;opacity:0.5;">ADAPT WINDOW</span>
+      <div style="font-family:'Newsreader',serif;font-size:54px;line-height:1;color:#fa6519;letter-spacing:-0.02em;">04:18</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.45;">REMAINING</div>
+    </div>
+  </div>
+
+  <!-- Workspace: elements panel + canvas + brief panel -->
+  <div style="display:grid;grid-template-columns:200px 1fr 280px;gap:18px;height:540px;">
+
+    <!-- Elements palette -->
+    <aside style="background:#fff;border:1px solid #EAEAEA;padding:18px;display:flex;flex-direction:column;gap:14px;overflow:hidden;">
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#000;opacity:0.55;">ELEMENTS · 8</span>
+        <span style="font-size:10px;color:#fa6519;">drag in →</span>
+      </div>
+      <sc-for list="{{ elements }}" as="el" hint-placeholder-count="6">
+        <div style="background:#F8F6F2;border:1px solid #EAEAEA;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:grab;">
+          <div style="width:24px;height:24px;background:{{ el.swatch }};flex-shrink:0;"></div>
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0;">
+            <span style="font-size:12px;font-weight:500;">{{ el.label }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.06em;color:#000;opacity:0.45;">{{ el.kind }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </aside>
+
+    <!-- Canvas -->
+    <div style="background:#fff;color:#000;position:relative;overflow:hidden;border:1px solid #EAEAEA;">
+      <!-- canvas grid lines -->
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,0,0,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,0.04) 1px,transparent 1px);background-size:32px 32px;"></div>
+
+      <!-- arranged elements -->
+      <div style="position:absolute;left:48px;top:36px;font-family:'Newsreader',serif;font-size:14px;letter-spacing:0.18em;text-transform:uppercase;color:#000;opacity:0.7;">CAMPUS · FILM · FEST</div>
+      <div style="position:absolute;left:48px;top:80px;width:380px;font-family:'Newsreader',serif;font-size:96px;line-height:0.9;letter-spacing:-0.03em;font-weight:400;">Late<br><span style="font-style:italic;color:#fa6519;">Bloom</span></div>
+      <div style="position:absolute;left:48px;top:340px;width:300px;font-size:13px;line-height:1.5;color:#000;opacity:0.7;">Five nights of student film. Open-air screenings on the quad. Bring a blanket.</div>
+      <div style="position:absolute;left:48px;top:430px;display:flex;align-items:center;gap:12px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;">
+        <span style="background:#000;color:#fff;padding:6px 10px;">APR 18–22</span>
+        <span style="color:#000;opacity:0.65;">THE QUAD · 7PM</span>
+      </div>
+      <!-- accent block -->
+      <div style="position:absolute;right:40px;top:60px;width:140px;height:140px;background:#fa6519;"></div>
+      <div style="position:absolute;right:40px;top:60px;width:140px;height:140px;border:1px solid #000;transform:translate(8px,8px);"></div>
+
+      <!-- selection handles around the headline -->
+      <div style="position:absolute;left:42px;top:74px;width:402px;height:262px;border:1.5px dashed #fa6519;pointer-events:none;"></div>
+      <div style="position:absolute;left:36px;top:68px;width:10px;height:10px;background:#fa6519;"></div>
+      <div style="position:absolute;left:440px;top:68px;width:10px;height:10px;background:#fa6519;"></div>
+      <div style="position:absolute;left:36px;top:330px;width:10px;height:10px;background:#fa6519;"></div>
+      <div style="position:absolute;left:440px;top:330px;width:10px;height:10px;background:#fa6519;"></div>
+
+      <!-- canvas chrome -->
+      <div style="position:absolute;bottom:14px;left:18px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;color:#000;opacity:0.4;">800 × 1200 · POSTER</div>
+      <div style="position:absolute;bottom:14px;right:18px;display:flex;gap:6px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#000;opacity:0.55;background:#fff;padding:5px 9px;border:1px solid rgba(0,0,0,0.1);">⌥ DRAG</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#000;opacity:0.55;background:#fff;padding:5px 9px;border:1px solid rgba(0,0,0,0.1);">G · GRID</span>
+      </div>
+    </div>
+
+    <!-- Brief / Adapt prompt panel -->
+    <aside style="display:flex;flex-direction:column;gap:14px;">
+      <!-- Original brief -->
+      <div style="background:#fff;border:1px solid #EAEAEA;padding:18px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#000;opacity:0.55;">ORIGINAL BRIEF · R1</span>
+        <p style="font-size:13px;line-height:1.55;margin-top:10px;color:#000;opacity:0.7;">Poster for a campus film fest. Friendly, indie tone. Title, dates, venue, one tagline.</p>
+      </div>
+
+      <!-- Adapt prompt — orange highlight -->
+      <div style="background:#fa6519;color:#000;padding:18px;position:relative;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;font-weight:600;">NEW PROMPT · JUST DROPPED ↓</span>
+        <p style="font-family:'Newsreader',serif;font-size:18px;line-height:1.35;margin-top:10px;letter-spacing:-0.01em;">The festival is now <span style="font-style:italic;font-weight:500;">horror-themed</span>. Same elements. Same canvas. Adapt the mood — <span style="font-style:italic;">don't restart</span>.</p>
+        <div style="margin-top:14px;padding-top:12px;border-top:1px solid rgba(0,0,0,0.18);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;">JUDGED ON: ADAPTABILITY · RESTRAINT · MOOD SHIFT</div>
+      </div>
+
+      <!-- What we're checking (dimensions — but no scores shown) -->
+      <div style="background:#fff;border:1px solid #EAEAEA;padding:18px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#000;opacity:0.55;">DIMENSIONS WE TRACK</span>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px;">
+          <sc-for list="{{ dims }}" as="d" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;">
+              <span style="color:#000;opacity:0.78;">{{ d }}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.35;">— hidden —</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button style="background:#000;color:#fff;border:none;padding:14px 16px;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
+        <span>Submit adaptation</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;opacity:0.55;">⌘↵</span>
+      </button>
+    </aside>
+  </div>
+
+  <!-- Round progress -->
+  <div style="margin-top:24px;display:flex;align-items:center;justify-content:space-between;padding-top:20px;border-top:1px solid #EAEAEA;">
+    <div style="display:flex;align-items:center;gap:18px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;color:#000;opacity:0.55;">ROUND PROGRESS</span>
+      <div style="display:flex;gap:6px;">
+        <sc-for list="{{ roundProgress }}" as="rp" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:32px;height:6px;background:{{ rp.color }};"></div>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:#000;opacity:0.55;">{{ rp.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.45;">~22 min remaining in session</span>
+  </div>
+</section>
+
+<!-- ========== DEMO 2 · VOICE NOTE THEORETICAL ROUND ========== -->
+<section data-screen-label="Theory — Voice Note Round" style="padding:32px 28px 56px;background:#F0EEE9;border-top:1px solid #EAEAEA;">
+
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:24px;gap:32px;">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#fa6519;">ROUND 01 / 03 · EXPLANATION</span>
+        <span style="font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:0.08em;padding:3px 7px;background:#fff;color:#000;border:1px solid #EAEAEA;">L3 · REASONING</span>
+      </div>
+      <h1 style="font-family:'Newsreader',serif;font-weight:400;font-size:48px;line-height:1.0;letter-spacing:-0.02em;max-width:780px;">
+        Explain <span style="font-style:italic;color:#fa6519;">recursion</span> like I'm twelve. In your own voice.
+      </h1>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px;">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;color:#000;opacity:0.5;">NO TIMER</span>
+      <span style="font-family:'Newsreader',serif;font-style:italic;font-size:18px;color:#000;opacity:0.7;">take your time</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 320px;gap:18px;">
+
+    <!-- Recorder -->
+    <div style="background:#fff;border:1px solid #EAEAEA;padding:32px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span class="rec-dot" style="width:12px;height:12px;background:#fa6519;border-radius:50%;"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;color:#fa6519;">RECORDING · 01:47</span>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#000;opacity:0.5;">MAX 3:00</span>
+      </div>
+
+      <!-- waveform -->
+      <div style="display:flex;align-items:center;gap:3px;height:120px;justify-content:center;padding:0 12px;">
+        <sc-for list="{{ wave }}" as="w" hint-placeholder-count="40">
+          <div class="wavebar" style="width:4px;height:{{ w.h }};background:{{ w.color }};animation-delay:{{ w.delay }};"></div>
+        </sc-for>
+      </div>
+
+      <!-- transcript -->
+      <div style="margin-top:28px;padding:20px;background:#000;border:1px solid #000;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#fff;opacity:0.45;">LIVE TRANSCRIPT</span>
+        <p style="font-family:'Newsreader',serif;font-size:17px;line-height:1.55;color:#fff;margin-top:10px;">
+          "So imagine you open a russian nesting doll. Inside is a smaller doll. You open <em style="color:#fa6519;font-style:normal;background:rgba(250,101,25,0.15);padding:1px 4px;">that</em> one — and there's another. <em style="color:#fff;opacity:0.55;">[pause]</em> Recursion is a function that calls a smaller version of <em style="color:#fa6519;font-style:normal;background:rgba(250,101,25,0.15);padding:1px 4px;">itself</em>, again and again, until it finds the smallest doll — the one with nothing inside…"
+        </p>
+        <span style="display:inline-block;width:8px;height:18px;background:#fa6519;margin-top:6px;vertical-align:middle;animation:pulse 1s ease-in-out infinite;"></span>
+      </div>
+
+      <!-- transport -->
+      <div style="margin-top:24px;display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <button style="background:#F8F6F2;border:1px solid #EAEAEA;color:#000;padding:11px 18px;font-size:12px;font-family:'Inter';cursor:pointer;">↺ Re-record</button>
+          <button style="background:#F8F6F2;border:1px solid #EAEAEA;color:#000;padding:11px 18px;font-size:12px;font-family:'Inter';cursor:pointer;">⏸ Pause</button>
+        </div>
+        <button style="background:#fa6519;color:#000;border:none;padding:14px 26px;font-size:14px;font-weight:600;cursor:pointer;">Submit for review →</button>
+      </div>
+    </div>
+
+    <!-- Side: what we judge -->
+    <aside style="display:flex;flex-direction:column;gap:14px;">
+      <div style="background:#fa6519;color:#000;padding:18px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;font-weight:600;">PROMPT</span>
+        <p style="font-family:'Newsreader',serif;font-size:18px;line-height:1.4;margin-top:10px;letter-spacing:-0.01em;">Use an analogy a twelve-year-old would actually understand. <span style="font-style:italic;">No jargon.</span></p>
+      </div>
+
+      <div style="background:#fff;border:1px solid #EAEAEA;padding:18px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;color:#000;opacity:0.55;">JUDGED ON</span>
+        <div style="display:flex;flex-direction:column;gap:14px;margin-top:14px;">
+          <sc-for list="{{ voiceDims }}" as="vd" hint-placeholder-count="4">
+            <div style="display:flex;flex-direction:column;gap:4px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:13px;font-weight:500;color:#000;">{{ vd.name }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#000;opacity:0.4;">— hidden —</span>
+              </div>
+              <span style="font-size:11px;color:#000;opacity:0.6;line-height:1.4;">{{ vd.body }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px dashed #BDBDBD;padding:14px;display:flex;gap:10px;align-items:flex-start;">
+        <span style="color:#fa6519;font-size:18px;line-height:1;">⚠</span>
+        <span style="font-size:11px;line-height:1.5;color:#000;opacity:0.75;">Authenticity check — pauses, mistakes, and self-correction are <em style="color:#fa6519;font-style:normal;">fine</em>. Polished AI voices get flagged.</span>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- LEVELS REMINDER FOOTER -->
+<section style="padding:48px 28px;background:#000;border-top:1px solid #000;">
+  <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:24px;">
+    <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:28px;letter-spacing:-0.02em;">Where this round fits</h2>
+    <a href="2026-08-11_rubrik_public-resume.dc.html" style="font-size:13px;color:#fff;opacity:0.7;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.3);padding-bottom:2px;">See full résumé →</a>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:rgba(255,255,255,0.08);">
+    <sc-for list="{{ levelStrip }}" as="ls" hint-placeholder-count="5">
+      <div style="background:{{ ls.bg }};color:{{ ls.fg }};padding:20px;display:flex;flex-direction:column;gap:8px;min-height:140px;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;opacity:0.7;">{{ ls.idx }}</span>
+        <span style="font-family:'Newsreader',serif;font-size:22px;letter-spacing:-0.01em;line-height:1.05;">{{ ls.name }}</span>
+        <span style="font-size:11px;line-height:1.45;opacity:0.7;margin-top:auto;">{{ ls.body }}</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;padding:3px 6px;background:{{ ls.judgeBg }};color:{{ ls.judgeFg }};align-self:flex-start;">{{ ls.judge }}</span>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+
+<!-- RUBI · CORNER · WATCHING -->
+<div style="position:fixed;bottom:24px;right:24px;display:flex;align-items:flex-end;gap:12px;z-index:50;font-family:'Inter',sans-serif;">
+  <div style="background:#000;color:#fff;padding:12px 14px;max-width:260px;border:2px solid #000;font-family:'Newsreader',serif;font-size:14px;line-height:1.35;position:relative;box-shadow:4px 4px 0 rgba(0,0,0,0.18);">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.14em;color:#fa6519;font-style:normal;">RUBI · WATCHING</span>
+    <p style="margin-top:4px;font-style:italic;">"Two tab-switches already. <span style="color:#fa6519;">Don't.</span>"</p>
+    <div style="position:absolute;right:-10px;bottom:18px;width:0;height:0;border-top:8px solid transparent;border-bottom:8px solid transparent;border-left:10px solid #000;"></div>
+  </div>
+  <svg width="64" height="72" viewBox="0 0 180 200" style="filter:drop-shadow(3px 3px 0 rgba(0,0,0,0.18));">
+    <path d="M40 70 Q40 22 90 22 Q140 22 140 70 Q140 118 90 118 Q40 118 40 70 Z" fill="#fff" stroke="#000" stroke-width="4" stroke-linejoin="round"/>
+    <path d="M65 65 L82 73" stroke="#000" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M115 65 L98 73" stroke="#000" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <circle cx="74" cy="80" r="4.5" fill="#000"/>
+    <circle cx="106" cy="80" r="4.5" fill="#000"/>
+    <path d="M76 100 L104 100" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M44 95 Q90 130 136 95" stroke="#000" stroke-width="4" fill="none" stroke-linecap="round"/>
+  </svg>
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1380}}">
+class Component extends DCLogic {
+  renderVals() {
+    const A = '#fa6519';
+    const wave = Array.from({length: 48}, (_, i) => {
+      const h = 18 + Math.round(Math.abs(Math.sin(i * 0.7) * 60) + (i % 3) * 8);
+      return { h: h + 'px', color: (i % 7 === 0) ? A : 'rgba(0,0,0,0.55)', delay: ((i % 8) * 0.08).toFixed(2) + 's' };
+    });
+    return {
+      tabs: [
+        { code: 'DEMO 01', label: 'Design · Canvas',     border: A, color: '#000', badgeBg: 'rgba(250,101,25,0.18)', badgeFg: A,     badge: 'ACTIVE' },
+        { code: 'DEMO 02', label: 'Theory · Voice note', border: 'transparent', color: 'rgba(0,0,0,0.55)', badgeBg: 'rgba(0,0,0,0.06)', badgeFg: '#000', badge: 'NEXT' },
+      ],
+      elements: [
+        { label: 'Title block',     kind: 'TYPE · DISPLAY',  swatch: '#000' },
+        { label: 'Tagline',         kind: 'TYPE · BODY',     swatch: '#444' },
+        { label: 'Date & venue',    kind: 'META',            swatch: '#fa6519' },
+        { label: 'Accent shape',    kind: 'FORM',            swatch: '#fa6519' },
+        { label: 'Photo plate',     kind: 'IMAGE',           swatch: '#BDBDBD' },
+        { label: 'Festival mark',   kind: 'LOGO',            swatch: '#EAEAEA' },
+      ],
+      dims: [
+        'Balance & visual weight',
+        'Hierarchy & focal point',
+        'Contrast & legibility',
+        'Adaptation under new brief',
+        'Restraint (over-design penalty)',
+      ],
+      roundProgress: [
+        { label: 'Arrange', color: A },
+        { label: 'Adapt',   color: A },
+        { label: 'Build',   color: '#EAEAEA' },
+        { label: 'Defend',  color: '#EAEAEA' },
+      ],
+      wave,
+      voiceDims: [
+        { name: 'Accuracy',     body: 'Core idea is correct and complete.' },
+        { name: 'Clarity',      body: 'A non-expert could follow it.' },
+        { name: 'Analogy fit',  body: 'The analogy actually maps to the concept.' },
+        { name: 'Authenticity', body: 'Human voice — pauses, hedges, self-correction.' },
+      ],
+      levelStrip: [
+        { idx: 'L1', name: 'Recall',      body: 'Identify and name the core ideas.',                bg: '#0F0F0F', fg: '#fff', judge: 'AI',     judgeBg: 'rgba(250,101,25,0.18)', judgeFg: A },
+        { idx: 'L2', name: 'Application', body: 'Apply the skill to a defined problem.',            bg: '#0F0F0F', fg: '#fff', judge: 'AI',     judgeBg: 'rgba(250,101,25,0.18)', judgeFg: A },
+        { idx: 'L3', name: 'Reasoning',   body: 'Explain why. Defend trade-offs.',                  bg: '#0F0F0F', fg: '#fff', judge: 'AI',     judgeBg: 'rgba(250,101,25,0.18)', judgeFg: A },
+        { idx: 'L4', name: 'Adaptation',  body: 'Transfer under new prompts. Current round.',       bg: A,         fg: '#000', judge: 'AI+REVIEW', judgeBg: '#000', judgeFg: A },
+        { idx: 'L5', name: 'Mastery',     body: 'Live proctored session with a domain expert.',     bg: '#0F0F0F', fg: '#fff', judge: 'HUMAN',  judgeBg: '#fff', judgeFg: '#000' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>
