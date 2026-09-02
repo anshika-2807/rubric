@@ -99,6 +99,7 @@ async function issueCredential({ recipient, skill, level, evidence }) {
       level,
       timestamp: Math.floor(Date.now() / 1000),
       evidenceHash,
+      network: 'Ethereum Sepolia (Chain ID 11155111)',
       txHash: mockTxHash,
       explorerUrl: `${CONFIG.explorerUrl}/tx/${mockTxHash}`,
       note: 'SIMULATION MODE: Sepolia credentials not fully configured in engine/.env. Add ISSUER_PRIVATE_KEY and CREDENTIAL_CONTRACT_ADDRESS for live Sepolia on-chain broadcast.',
@@ -140,6 +141,7 @@ async function issueCredential({ recipient, skill, level, evidence }) {
     level,
     timestamp: Math.floor(Date.now() / 1000),
     evidenceHash,
+    network: 'Ethereum Sepolia (Chain ID 11155111)',
     txHash: receipt.hash,
     blockNumber: receipt.blockNumber,
     explorerUrl: `${CONFIG.explorerUrl}/tx/${receipt.hash}`,
@@ -154,6 +156,8 @@ async function verifyCredential(credentialId) {
   if (!credentialId) throw new Error('credentialId required');
 
   if (!CONFIG.isWeb3Configured || !ethers) {
+    const mockHash = '0x' + crypto.createHash('sha256').update('cred-evidence-' + credentialId).digest('hex');
+    const mockTx = '0x' + crypto.createHash('sha256').update('cred-tx-' + credentialId).digest('hex');
     return {
       configured: false,
       isValid: true,
@@ -162,7 +166,10 @@ async function verifyCredential(credentialId) {
       skill: 'Problem Framing',
       level: 'L2',
       timestamp: Math.floor(Date.now() / 1000),
-      evidenceHash: '0x' + crypto.createHash('sha256').update('mock-evidence').digest('hex'),
+      evidenceHash: mockHash,
+      network: 'Ethereum Sepolia (Chain ID 11155111)',
+      txHash: mockTx,
+      explorerUrl: `${CONFIG.explorerUrl}/tx/${mockTx}`,
       note: 'Web3 configuration not detected in .env. Showing verification format.',
     };
   }
@@ -179,8 +186,26 @@ async function verifyCredential(credentialId) {
       configured: true,
       isValid: false,
       id: credentialId.toString(),
+      network: 'Ethereum Sepolia (Chain ID 11155111)',
     };
   }
+
+  let txHash = null;
+  if (contractArtifact && contract.filters && contract.filters.CredentialIssued) {
+    try {
+      const filter = contract.filters.CredentialIssued(credentialId);
+      const events = await contract.queryFilter(filter, -5000);
+      if (events && events.length > 0) {
+        txHash = events[0].transactionHash;
+      }
+    } catch (e) {
+      // ignore if queryFilter is unsupported by RPC
+    }
+  }
+
+  const explorerLink = txHash
+    ? `${CONFIG.explorerUrl}/tx/${txHash}`
+    : `${CONFIG.explorerUrl}/address/${CONFIG.contractAddress}`;
 
   return {
     configured: true,
@@ -191,7 +216,10 @@ async function verifyCredential(credentialId) {
     level: res[3] || res.level,
     timestamp: Number(res[4] || res.timestamp),
     evidenceHash: res[5] || res.evidenceHash,
-    explorerUrl: `${CONFIG.explorerUrl}/address/${CONFIG.contractAddress}`,
+    network: 'Ethereum Sepolia (Chain ID 11155111)',
+    txHash: txHash || 'On-chain verified (Contract storage)',
+    contractAddress: CONFIG.contractAddress,
+    explorerUrl: explorerLink,
   };
 }
 
@@ -225,6 +253,9 @@ async function getRecipientCredentials(recipientAddress) {
         level: cred.level,
         timestamp: Number(cred.timestamp),
         evidenceHash: cred.evidenceHash,
+        network: 'Ethereum Sepolia (Chain ID 11155111)',
+        txHash: 'On-chain verified (Contract storage)',
+        explorerUrl: `${CONFIG.explorerUrl}/address/${CONFIG.contractAddress}`,
       });
     } catch (err) {
       console.warn(`[Web3] Could not read credential ${id}:`, err.message);

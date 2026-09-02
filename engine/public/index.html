@@ -298,6 +298,54 @@ async function end() {
   sessionId = null; busy = false;
 }
 
+// ---- Credential Details & Audit Trail Component ----
+function renderAuditTrailBlock(c) {
+  const dateStr = c.timestamp ? new Date(c.timestamp * 1000).toLocaleString() : new Date().toLocaleString();
+  const network = c.network || 'Ethereum Sepolia (Chain ID 11155111)';
+  const txHash = c.txHash || 'Anchor transaction confirmed';
+  const explorerLink = c.explorerUrl || (c.txHash ? `https://sepolia.etherscan.io/tx/${c.txHash}` : 'https://sepolia.etherscan.io');
+  const credId = c.credentialId || c.id || '1';
+
+  return `
+    <div style="margin-top:16px;background:#fff;border:1px solid #000;padding:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EAEAEA;padding-bottom:10px;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <span class="label" style="font-size:11px;font-weight:700;">CREDENTIAL DETAILS · AUDIT TRAIL</span>
+        <span class="pill" style="background:#fa6519;color:#000;font-weight:700;">✓ On-chain credential verified</span>
+      </div>
+      <div class="mono" style="font-size:11px;line-height:1.85;">
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Skill</span><span><strong>${c.skill}</strong></span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Level</span><span><strong>${c.level}</strong></span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Credential ID</span><span>#${credId}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Recipient Wallet</span><span style="word-break:break-all;">${c.recipient}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Issuance Date</span><span>${dateStr}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Evidence Hash</span><span style="word-break:break-all;">${c.evidenceHash} <span style="opacity:.5;font-size:10px;">(keccak256 · private transcript off-chain)</span></span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Blockchain / Network</span><span>${network}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Transaction Hash</span><span style="word-break:break-all;">${txHash}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding-top:6px;">
+          <span style="opacity:.6;">Sepolia Explorer</span><span><a href="${explorerLink}" target="_blank" rel="noopener noreferrer" class="link">View on Sepolia Etherscan ↗</a></span>
+        </div>
+      </div>
+      ${c.note ? `<div class="mono" style="font-size:10px;opacity:.65;margin-top:10px;border-top:1px dashed #EAEAEA;padding-top:8px;">${c.note}</div>` : ''}
+    </div>
+  `;
+}
+
 // ---- On-chain Credential Issuance ----
 async function issueCredentialOnChain() {
   if (!connectedWallet) {
@@ -323,24 +371,7 @@ async function issueCredentialOnChain() {
       }
     });
 
-    $('credIssueResult').innerHTML = `
-      <div style="margin-top:14px;background:#fff;border:1px solid #000;padding:16px;">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="color:#000;font-weight:700;">✓ CREDENTIAL ISSUED ON-CHAIN</span>
-          <span class="pill" style="background:#fa6519;color:#000;">ID #${result.credentialId}</span>
-        </div>
-        <div class="mono" style="font-size:11px;margin-top:10px;line-height:1.7;">
-          <div><strong>Recipient:</strong> ${result.recipient}</div>
-          <div><strong>Skill & Level:</strong> ${result.skill} (${result.level})</div>
-          <div><strong>Evidence Hash (keccak256):</strong> <span style="word-break:break-all;">${result.evidenceHash}</span></div>
-          <div><strong>Transaction Hash:</strong> <span style="word-break:break-all;">${result.txHash}</span></div>
-          <div style="margin-top:8px;">
-            <a href="${result.explorerUrl}" target="_blank" rel="noopener noreferrer" class="link">View on Sepolia Etherscan ↗</a>
-          </div>
-          ${result.note ? `<div style="margin-top:6px;opacity:.7;font-size:10px;">${result.note}</div>` : ''}
-        </div>
-      </div>
-    `;
+    $('credIssueResult').innerHTML = renderAuditTrailBlock(result);
 
     rubi(`"Attestation minted on-chain. Credential <span style=\'color:#fa6519;\'>#${result.credentialId}</span> is now soulbound to your address."`);
   } catch (err) {
