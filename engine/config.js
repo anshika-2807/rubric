@@ -26,6 +26,14 @@ const CONFIG = {
   port: parseInt(process.env.PORT || '4600', 10),
   maxCandidateTurns: 40,
   get mockMode() { return !this.apiKey; },
+  // Web3 / Sepolia Configuration
+  sepoliaRpcUrl: process.env.SEPOLIA_RPC_URL || 'https://rpc.sepolia.org',
+  issuerPrivateKey: process.env.ISSUER_PRIVATE_KEY || null,
+  contractAddress: process.env.CREDENTIAL_CONTRACT_ADDRESS || null,
+  explorerUrl: process.env.EXPLORER_URL || 'https://sepolia.etherscan.io',
+  get isWeb3Configured() {
+    return Boolean(this.issuerPrivateKey && this.contractAddress);
+  },
 };
 
 module.exports = { CONFIG };

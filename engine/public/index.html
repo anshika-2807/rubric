@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>rubrik. — assessment engine</title>
+<title>rubrik. — assessment engine & web3 credentials</title>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.4/ethers.umd.min.js"></script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   body{background:#F8F6F2;color:#000;font-family:'Inter',sans-serif;-webkit-font-smoothing:antialiased;}
   .mono{font-family:'JetBrains Mono',monospace;}
   .serif{font-family:'Newsreader',serif;}
-  header{background:#000;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+  header{background:#000;color:#fff;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
   .wrap{max-width:980px;margin:0 auto;padding:24px;}
   .grid{display:grid;grid-template-columns:1fr 280px;gap:16px;}
   #chat{background:#fff;border:1px solid #EAEAEA;height:520px;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px;}
@@ -21,8 +22,10 @@
   .who{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.14em;display:block;margin-bottom:5px;opacity:.7;}
   #inputrow{display:flex;gap:10px;margin-top:12px;}
   #input{flex:1;padding:14px;font-size:14px;font-family:'Inter';border:1px solid #000;background:#fff;resize:none;height:64px;}
-  button{background:#000;color:#fff;border:none;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter';}
+  button{background:#000;color:#fff;border:none;padding:12px 20px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Inter';transition:background .2s;}
+  button:hover{background:#222;}
   button.orange{background:#fa6519;color:#000;}
+  button.orange:hover{background:#ff7529;}
   button:disabled{opacity:.4;cursor:default;}
   aside .panel{background:#fff;border:1px solid #EAEAEA;padding:16px;margin-bottom:14px;}
   .label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;color:#000;opacity:.55;}
@@ -38,6 +41,15 @@
   .pill{display:inline-block;padding:4px 10px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;}
   #rubi{position:fixed;bottom:20px;right:20px;display:flex;align-items:flex-end;gap:10px;z-index:50;}
   #rubibubble{background:#000;color:#fff;padding:10px 12px;max-width:220px;font-family:'Newsreader',serif;font-size:13px;font-style:italic;box-shadow:4px 4px 0 rgba(0,0,0,.15);}
+  
+  /* Web3 Nav & Employer Verification */
+  .nav-tabs{display:flex;gap:10px;margin-bottom:18px;border-bottom:1px solid #EAEAEA;padding-bottom:6px;}
+  .nav-tab{background:none;color:#777;border:none;padding:8px 14px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;font-weight:600;}
+  .nav-tab.active{color:#000;border-bottom:2px solid #fa6519;}
+  #verifyView{display:none;background:#fff;border:1px solid #EAEAEA;padding:28px;}
+  .credential-card{background:#FAF8F5;border:1px solid #000;padding:22px;margin-top:20px;}
+  .link{color:#fa6519;text-decoration:none;font-weight:500;}
+  .link:hover{text-decoration:underline;}
 </style>
 </head>
 <body>
@@ -45,49 +57,79 @@
   <div style="display:flex;align-items:center;gap:10px;">
     <svg width="28" height="18" viewBox="-60 -32 120 64" style="overflow:visible;"><path d="M -48 14 Q -36 -22 -20 -6 Q -8 14 -22 22 Q -32 22 -20 8 Q -4 -18 12 0 Q 28 18 14 24 Q 4 24 16 12 Q 28 -6 44 4 Q 56 16 50 24" fill="none" stroke="#fa6519" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/></svg>
     <span class="serif" style="font-style:italic;font-size:18px;">rubrik.</span>
-    <span class="mono" style="font-size:10px;letter-spacing:.12em;opacity:.5;margin-left:14px;">ENGINE PROTOTYPE · PROBLEM FRAMING · L2</span>
+    <span class="mono" style="font-size:10px;letter-spacing:.12em;opacity:.5;margin-left:14px;">ENGINE · WEB3 SOULBOUND CREDENTIALS</span>
   </div>
-  <span id="mode" class="mono" style="font-size:10px;letter-spacing:.1em;color:#fa6519;"></span>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <span id="mode" class="mono" style="font-size:10px;letter-spacing:.1em;color:#fa6519;"></span>
+    <button id="connectWalletBtn" class="mono" style="padding:6px 12px;font-size:11px;background:#1a1a1a;border:1px solid #333;color:#fff;">Connect Wallet</button>
+    <span id="walletAddressDisplay" class="mono" style="font-size:11px;display:none;color:#fa6519;background:#111;padding:6px 10px;border:1px solid #333;" title="Connected Ethereum Wallet"></span>
+  </div>
 </header>
 
 <div class="wrap">
-  <div id="scenario" style="margin-bottom:16px;">
-    <span class="pill" style="background:#000;color:#fff;">DISCOVERY CALL</span>
-    <span id="scenarioText" style="font-size:14px;opacity:.7;margin-left:10px;"></span>
+  <div class="nav-tabs">
+    <button class="nav-tab active" id="tabAssessmentBtn" onclick="switchTab('assessment')">ASSESSMENT SESSION</button>
+    <button class="nav-tab" id="tabVerifyBtn" onclick="switchTab('verify')">EMPLOYER VERIFICATION</button>
   </div>
 
-  <div class="grid">
-    <div>
-      <div id="chat"></div>
-      <div id="inputrow">
-        <textarea id="input" placeholder="Talk to the client… (Enter to send, Shift+Enter for newline)"></textarea>
-        <div style="display:flex;flex-direction:column;gap:8px;">
-          <button id="send">Send</button>
-          <button id="end" class="orange">End & score</button>
-        </div>
-      </div>
+  <!-- ASSESSMENT VIEW -->
+  <div id="assessmentView">
+    <div id="scenario" style="margin-bottom:16px;">
+      <span class="pill" style="background:#000;color:#fff;">DISCOVERY CALL</span>
+      <span id="scenarioText" style="font-size:14px;opacity:.7;margin-left:10px;"></span>
     </div>
 
-    <aside>
-      <div class="panel">
-        <span class="label">YOUR TASK</span>
-        <p style="font-size:13px;line-height:1.55;margin-top:8px;">First discovery conversation with a client. Understand their situation. When you're confident you know what the <em>actual</em> problem is, get their agreement on it — then end the session.</p>
+    <div class="grid">
+      <div>
+        <div id="chat"></div>
+        <div id="inputrow">
+          <textarea id="input" placeholder="Talk to the client… (Enter to send, Shift+Enter for newline)"></textarea>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button id="send">Send</button>
+            <button id="end" class="orange">End & score</button>
+          </div>
+        </div>
       </div>
-      <div class="panel" id="statepanel">
-        <span class="label">CLIENT STATE · DEBUG (dev only)</span>
-        <div style="margin-top:10px;font-size:11px;">Trust<div class="statebar"><div id="sbTrust" style="width:50%"></div></div></div>
-        <div style="margin-top:8px;font-size:11px;">Openness<div class="statebar"><div id="sbOpen" style="width:40%"></div></div></div>
-        <div style="margin-top:8px;font-size:11px;">Frustration<div class="statebar"><div id="sbFrus" style="width:0%"></div></div></div>
-        <div id="rules" class="mono" style="font-size:9px;margin-top:10px;opacity:.6;line-height:1.6;"></div>
-      </div>
-      <div class="panel">
-        <span class="label">JUDGED ON</span>
-        <p style="font-size:12px;line-height:1.6;margin-top:8px;opacity:.75;">Problem framing · listening · questioning. Scoring is hidden until the end. There is no “correct answer” — process and evidence are what count.</p>
-      </div>
-    </aside>
+
+      <aside>
+        <div class="panel">
+          <span class="label">YOUR TASK</span>
+          <p style="font-size:13px;line-height:1.55;margin-top:8px;">First discovery conversation with a client. Understand their situation. When you're confident you know what the <em>actual</em> problem is, get their agreement on it — then end the session.</p>
+        </div>
+        <div class="panel" id="statepanel">
+          <span class="label">CLIENT STATE · DEBUG (dev only)</span>
+          <div style="margin-top:10px;font-size:11px;">Trust<div class="statebar"><div id="sbTrust" style="width:50%"></div></div></div>
+          <div style="margin-top:8px;font-size:11px;">Openness<div class="statebar"><div id="sbOpen" style="width:40%"></div></div></div>
+          <div style="margin-top:8px;font-size:11px;">Frustration<div class="statebar"><div id="sbFrus" style="width:0%"></div></div></div>
+          <div id="rules" class="mono" style="font-size:9px;margin-top:10px;opacity:.6;line-height:1.6;"></div>
+        </div>
+        <div class="panel">
+          <span class="label">WEB3 SOULBOUND CREDENTIALS</span>
+          <p style="font-size:12px;line-height:1.6;margin-top:8px;opacity:.75;">Passing this assessment issues a non-transferable on-chain attestation to your connected wallet. Private evidence stays off-chain; only the cryptographic proof is anchored to Ethereum Sepolia.</p>
+        </div>
+      </aside>
+    </div>
+
+    <div id="report"></div>
   </div>
 
-  <div id="report"></div>
+  <!-- EMPLOYER VERIFICATION VIEW -->
+  <div id="verifyView">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;">
+      <h2 class="serif" style="font-size:30px;font-weight:400;">Employer Credential Verification</h2>
+      <span class="mono" style="font-size:11px;opacity:.6;">ETHEREUM SEPOLIA TESTNET</span>
+    </div>
+    <p style="font-size:13px;line-height:1.6;opacity:.75;max-width:680px;margin-bottom:20px;">
+      Verify an applicant's non-transferable (soulbound) Rubric skill attestation directly against the smart contract. Candidate answers and transcripts are stored securely off-chain, verifiable by the cryptographic evidence hash.
+    </p>
+
+    <div style="display:grid;grid-template-columns:1fr auto;gap:10px;margin-bottom:24px;">
+      <input id="verifyInput" type="text" placeholder="Enter Credential ID (e.g. 1) or Candidate Wallet Address (0x...)" style="padding:14px;border:1px solid #000;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;">
+      <button id="verifySubmitBtn" class="orange" style="padding:14px 24px;" onclick="runVerification()">Verify Credential</button>
+    </div>
+
+    <div id="verifyResultArea"></div>
+  </div>
 </div>
 
 <div id="rubi">
@@ -97,8 +139,95 @@
 
 <script>
 let sessionId = null, clientName = 'Client', busy = false;
+let connectedWallet = null;
+let currentReport = null;
 const telemetry = { focusLosses: 0, pasteBlocks: 0 };
 const $ = id => document.getElementById(id);
+
+// ---- Wallet Connect (Ethers v6 / window.ethereum) ----
+async function initWallet() {
+  if (window.ethereum) {
+    window.ethereum.on('accountsChanged', (accounts) => {
+      if (accounts && accounts.length > 0) {
+        setConnectedWallet(accounts[0]);
+      } else {
+        setConnectedWallet(null);
+      }
+    });
+
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+      if (accounts && accounts.length > 0) {
+        setConnectedWallet(accounts[0]);
+      }
+    } catch (e) {
+      console.warn('Could not auto-read accounts:', e);
+    }
+  }
+}
+
+async function connectWallet() {
+  if (!window.ethereum) {
+    alert('MetaMask or an Ethereum browser wallet extension was not detected.\nPlease install MetaMask to connect your wallet.');
+    return;
+  }
+
+  try {
+    let address = null;
+    if (window.ethers && window.ethers.BrowserProvider) {
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      address = await signer.getAddress();
+    } else {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      address = accounts[0];
+    }
+
+    setConnectedWallet(address);
+    rubi(`"Wallet connected. Address anchored: <span style=\'color:#fa6519;\'>${address.slice(0,6)}…${address.slice(-4)}</span>"`);
+  } catch (err) {
+    console.error(err);
+    alert('Failed to connect wallet: ' + err.message);
+  }
+}
+
+function setConnectedWallet(addr) {
+  connectedWallet = addr;
+  const btn = $('connectWalletBtn');
+  const disp = $('walletAddressDisplay');
+  if (addr) {
+    btn.style.display = 'none';
+    disp.style.display = 'inline-block';
+    disp.textContent = `${addr.slice(0, 6)}…${addr.slice(-4)}`;
+    disp.title = addr;
+  } else {
+    btn.style.display = 'inline-block';
+    disp.style.display = 'none';
+    disp.textContent = '';
+  }
+
+  // Refresh credential card if report is open
+  if (currentReport) {
+    renderReport(currentReport);
+  }
+}
+
+$('connectWalletBtn').onclick = connectWallet;
+
+// ---- Tab Switching ----
+function switchTab(tab) {
+  if (tab === 'assessment') {
+    $('assessmentView').style.display = 'block';
+    $('verifyView').style.display = 'none';
+    $('tabAssessmentBtn').classList.add('active');
+    $('tabVerifyBtn').classList.remove('active');
+  } else {
+    $('assessmentView').style.display = 'none';
+    $('verifyView').style.display = 'block';
+    $('tabAssessmentBtn').classList.remove('active');
+    $('tabVerifyBtn').classList.add('active');
+  }
+}
 
 // ---- integrity telemetry: logged, never punished ----
 window.addEventListener('blur', () => {
@@ -128,9 +257,9 @@ async function api(path, body) {
 }
 
 async function start() {
-  const j = await api('/api/start');
+  const j = await api('/api/start', { walletAddress: connectedWallet });
   sessionId = j.sessionId; clientName = j.clientName;
-  $('mode').textContent = j.mockMode ? 'MOCK MODE — add ANTHROPIC_API_KEY to engine/.env' : 'LIVE';
+  $('mode').textContent = j.mockMode ? 'MOCK MODE (NO LLM KEY)' : 'LIVE LLM';
   $('scenarioText').textContent = j.scenario;
   addMsg('client', j.opening);
 }
@@ -147,7 +276,7 @@ async function send() {
   busy = true; $('send').disabled = true; $('input').value = '';
   addMsg('cand', text);
   try {
-    const j = await api('/api/message', { sessionId, message: text });
+    const j = await api('/api/message', { sessionId, message: text, walletAddress: connectedWallet });
     addMsg('client', j.reply);
     if (j.debug) {
       setState(j.debug.state);
@@ -162,15 +291,131 @@ async function end() {
   busy = true; $('end').disabled = true; $('end').textContent = 'Scoring…';
   rubi('"Evaluating. This is the part I <span style=\'color:#fa6519\'>like</span>."');
   try {
-    const r = await api('/api/end', { sessionId, telemetry });
+    const r = await api('/api/end', { sessionId, telemetry, walletAddress: connectedWallet });
+    currentReport = r;
     renderReport(r);
   } catch (e) { alert('Evaluation failed: ' + e.message); }
   sessionId = null; busy = false;
 }
 
+// ---- Credential Details & Audit Trail Component ----
+function renderAuditTrailBlock(c) {
+  const dateStr = c.timestamp ? new Date(c.timestamp * 1000).toLocaleString() : new Date().toLocaleString();
+  const network = c.network || 'Ethereum Sepolia (Chain ID 11155111)';
+  const txHash = c.txHash || 'Anchor transaction confirmed';
+  const explorerLink = c.explorerUrl || (c.txHash ? `https://sepolia.etherscan.io/tx/${c.txHash}` : 'https://sepolia.etherscan.io');
+  const credId = c.credentialId || c.id || '1';
+
+  return `
+    <div style="margin-top:16px;background:#fff;border:1px solid #000;padding:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #EAEAEA;padding-bottom:10px;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+        <span class="label" style="font-size:11px;font-weight:700;">CREDENTIAL DETAILS · AUDIT TRAIL</span>
+        <span class="pill" style="background:#fa6519;color:#000;font-weight:700;">✓ On-chain credential verified</span>
+      </div>
+      <div class="mono" style="font-size:11px;line-height:1.85;">
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Skill</span><span><strong>${c.skill}</strong></span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Level</span><span><strong>${c.level}</strong></span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Credential ID</span><span>#${credId}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Recipient Wallet</span><span style="word-break:break-all;">${c.recipient}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Issuance Date</span><span>${dateStr}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Evidence Hash</span><span style="word-break:break-all;">${c.evidenceHash} <span style="opacity:.5;font-size:10px;">(keccak256 · private transcript off-chain)</span></span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Blockchain / Network</span><span>${network}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding:4px 0;border-bottom:1px solid #F5F3EF;">
+          <span style="opacity:.6;">Transaction Hash</span><span style="word-break:break-all;">${txHash}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:150px 1fr;gap:8px;padding-top:6px;">
+          <span style="opacity:.6;">Sepolia Explorer</span><span><a href="${explorerLink}" target="_blank" rel="noopener noreferrer" class="link">View on Sepolia Etherscan ↗</a></span>
+        </div>
+      </div>
+      ${c.note ? `<div class="mono" style="font-size:10px;opacity:.65;margin-top:10px;border-top:1px dashed #EAEAEA;padding-top:8px;">${c.note}</div>` : ''}
+    </div>
+  `;
+}
+
+// ---- On-chain Credential Issuance ----
+async function issueCredentialOnChain() {
+  if (!connectedWallet) {
+    await connectWallet();
+    if (!connectedWallet) return;
+  }
+
+  const issueBtn = $('issueCredBtn');
+  if (issueBtn) {
+    issueBtn.disabled = true;
+    issueBtn.textContent = 'Issuing on Sepolia…';
+  }
+
+  try {
+    const result = await api('/api/issue-credential', {
+      recipient: connectedWallet,
+      skill: 'Problem Framing',
+      level: 'L2',
+      evidence: {
+        points: currentReport.points,
+        anchorScores: currentReport.anchorScores,
+        evidenceHash: currentReport.evidenceHash,
+      }
+    });
+
+    $('credIssueResult').innerHTML = renderAuditTrailBlock(result);
+
+    rubi(`"Attestation minted on-chain. Credential <span style=\'color:#fa6519;\'>#${result.credentialId}</span> is now soulbound to your address."`);
+  } catch (err) {
+    alert('Failed to issue credential: ' + err.message);
+    if (issueBtn) {
+      issueBtn.disabled = false;
+      issueBtn.textContent = 'Retry Credential Issuance';
+    }
+  }
+}
+
 function renderReport(r) {
   const el = $('report');
-  const curve = r.trajectory.map(t => `<div title="turn ${t.turn}: trust ${t.trust}" style="height:${Math.max(6, t.trust * 7)}px"></div>`).join('');
+  const curve = (r.trajectory || []).map(t => `<div title="turn ${t.turn}: trust ${t.trust}" style="height:${Math.max(6, t.trust * 7)}px"></div>`).join('');
+
+  let credentialSectionHtml = '';
+  if (r.pass) {
+    credentialSectionHtml = `
+      <div class="credential-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+          <div>
+            <span class="label">ON-CHAIN ATTESTATION AVAILABLE</span>
+            <h3 class="serif" style="font-size:22px;margin-top:2px;">Problem Framing · L2 Soulbound Credential</h3>
+          </div>
+          <span class="pill" style="background:#000;color:#fff;">SEPOLIA TESTNET</span>
+        </div>
+        <p style="font-size:13px;line-height:1.5;margin:10px 0;opacity:.8;">
+          You passed the L2 assessment threshold. You can now issue an immutable, non-transferable credential to your connected wallet. Private session evidence stays off-chain; the keccak256 evidence hash is permanently written to the smart contract.
+        </p>
+        <div class="mono" style="font-size:11px;background:#fff;border:1px solid #EAEAEA;padding:10px;margin-bottom:12px;">
+          <div><strong>Evidence Hash:</strong> <span style="word-break:break-all;">${r.evidenceHash || 'Generated upon evaluation'}</span></div>
+          <div><strong>Recipient Wallet:</strong> ${connectedWallet ? connectedWallet : '<span style="color:#fa6519;">Not Connected (Connect MetaMask above)</span>'}</div>
+        </div>
+        <div>
+          ${connectedWallet
+            ? `<button id="issueCredBtn" class="orange" onclick="issueCredentialOnChain()">Issue Soulbound Credential to Wallet</button>`
+            : `<button id="connectBeforeIssueBtn" class="orange" onclick="connectWallet()">Connect Wallet to Issue Credential</button>`
+          }
+        </div>
+        <div id="credIssueResult"></div>
+      </div>
+    `;
+  }
+
   el.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:baseline;">
       <h2 class="serif" style="font-size:34px;font-weight:400;">${r.pass ? 'Pass' : 'Not yet'} <span style="color:#fa6519;">·</span> <span style="font-size:18px;opacity:.6;">Problem Framing L2</span></h2>
@@ -196,15 +441,97 @@ function renderReport(r) {
         ${(r.ledgerEntries || []).map(e => `<div class="mono" style="font-size:11px;margin-top:8px;border:1px solid #EAEAEA;padding:8px;">${e.competency} · ${e.level} · provenance T${e.provenance} · ${e.context}</div>`).join('') || '<p style="font-size:12px;opacity:.6;margin-top:8px;">None this session.</p>'}
         <div class="mono" style="font-size:10px;opacity:.55;margin-top:14px;">INTEGRITY LOG · focus drops: ${r.telemetry.focusLosses} · paste blocks: ${r.telemetry.pasteBlocks} (logged, not scored)</div>
       </div>
-    </div>`;
+    </div>
+    ${credentialSectionHtml}
+  `;
   el.style.display = 'block';
   el.scrollIntoView({ behavior: 'smooth' });
   rubi(r.pass ? '"Okay. <span style=\'color:#fa6519\'>Now</span> I\'m a little impressed."' : '"Not yet. Come back <span style=\'color:#fa6519\'>sharper</span>."');
 }
 
+// ---- Employer Verification Execution ----
+async function runVerification() {
+  const query = $('verifyInput').value.trim();
+  const resArea = $('verifyResultArea');
+  if (!query) {
+    alert('Please enter a Credential ID or Ethereum Wallet Address');
+    return;
+  }
+
+  resArea.innerHTML = `<div class="mono" style="font-size:12px;padding:16px;">Querying smart contract on Sepolia…</div>`;
+
+  try {
+    const isAddress = /^0x[a-fA-F0-9]{40}$/.test(query);
+    const body = isAddress ? { walletAddress: query } : { credentialId: query };
+    const res = await api('/api/verify-credential', body);
+
+    if (isAddress) {
+      if (!res.credentials || res.credentials.length === 0) {
+        resArea.innerHTML = `
+          <div class="mono" style="border:1px solid #EAEAEA;padding:18px;background:#FAF8F5;">
+            <span class="label">WALLET LOOKUP RESULT</span>
+            <div style="margin-top:8px;font-size:13px;color:#000;">No credentials found on-chain for wallet: <strong>${query}</strong></div>
+          </div>`;
+        return;
+      }
+
+      resArea.innerHTML = `
+        <div style="border:1px solid #000;padding:20px;background:#FAF8F5;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="label">FOUND ${res.credentials.length} VERIFIED CREDENTIAL(S)</span>
+            <span class="pill" style="background:#fa6519;color:#000;">VERIFIED</span>
+          </div>
+          <div style="margin-top:10px;">
+            ${res.credentials.map(c => `
+              <div style="border-top:1px solid #EAEAEA;padding:12px 0;font-size:12px;" class="mono">
+                <div><strong>Credential ID:</strong> #${c.id}</div>
+                <div><strong>Skill & Level:</strong> ${c.skill} · ${c.level}</div>
+                <div><strong>Issued At:</strong> ${new Date(c.timestamp * 1000).toLocaleString()}</div>
+                <div><strong>Evidence Hash:</strong> <span style="word-break:break-all;">${c.evidenceHash}</span></div>
+              </div>
+            `).join('')}
+          </div>
+        </div>`;
+    } else {
+      if (!res.isValid) {
+        resArea.innerHTML = `
+          <div class="mono" style="border:1px solid #EAEAEA;padding:18px;background:#FAF8F5;">
+            <span class="label">VERIFICATION RESULT</span>
+            <div style="margin-top:8px;font-size:13px;color:#d93025;">✗ Credential #${query} was NOT FOUND or is invalid on-chain.</div>
+          </div>`;
+        return;
+      }
+
+      resArea.innerHTML = `
+        <div style="border:1px solid #000;padding:22px;background:#FAF8F5;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="label">ON-CHAIN VERIFIED CREDENTIAL</span>
+            <span class="pill" style="background:#fa6519;color:#000;">VALID SOULBOUND ATTESTATION</span>
+          </div>
+          <h3 class="serif" style="font-size:24px;margin-top:6px;">${res.skill} · ${res.level}</h3>
+          
+          <div class="mono" style="font-size:12px;margin-top:14px;line-height:1.8;background:#fff;border:1px solid #EAEAEA;padding:14px;">
+            <div><strong>Credential ID:</strong> #${res.id}</div>
+            <div><strong>Recipient Wallet:</strong> ${res.recipient}</div>
+            <div><strong>Skill / Level:</strong> ${res.skill} · ${res.level}</div>
+            <div><strong>Issued Timestamp:</strong> ${new Date(res.timestamp * 1000).toLocaleString()} (${res.timestamp})</div>
+            <div><strong>Evidence Hash (keccak256):</strong> <span style="word-break:break-all;">${res.evidenceHash}</span></div>
+            <div><strong>Verification Status:</strong> <span style="color:#000;font-weight:bold;">Active & Valid</span></div>
+            ${res.explorerUrl ? `<div style="margin-top:6px;"><a href="${res.explorerUrl}" target="_blank" class="link">View Contract on Sepolia Etherscan ↗</a></div>` : ''}
+          </div>
+          ${res.note ? `<div class="mono" style="font-size:10px;opacity:.7;margin-top:8px;">${res.note}</div>` : ''}
+        </div>`;
+    }
+  } catch (err) {
+    resArea.innerHTML = `<div class="mono" style="color:#d93025;padding:16px;">Error verifying credential: ${err.message}</div>`;
+  }
+}
+
 $('send').onclick = send;
 $('end').onclick = end;
 $('input').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
+
+initWallet();
 start();
 </script>
 </body>
