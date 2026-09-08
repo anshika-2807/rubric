@@ -1,198 +1,207 @@
-// rubrik. assessment engine — zero-dependency HTTP server.
-// Run: node server.js  →  http://localhost:4600
-// Optional: engine/.env with ANTHROPIC_API_KEY=sk-ant-... (else mock mode)
+// rubrik. — application server.
+//
+//   node server.js   →  http://localhost:4600
+//
+// One long-running Node process. No build step, no bundler, no framework.
+// Pages are server-rendered from engine/views/*; the assessment pipeline lives
+// in the modules the routes delegate to.
+//
+// Two invariants this file is responsible for:
+//
+//   1. Hidden assessment material never leaves the process. Sessions hold the
+//      brief, cues and thresholds; responses carry only what the candidate is
+//      entitled to see. The one exception is the client-state debug block, which
+//      is gated on CONFIG.debugPanel and therefore absent in any deployment that
+//      has not explicitly opted in.
+//   2. No verdict is ever accepted from a client. Results are computed here and
+//      read back from the store for display.
 
 const http = require('http');
-const fs = require('fs');
 const path = require('path');
-const crypto = require('crypto');
 
 const { CONFIG } = require('./config');
-const { ClientState } = require('./state');
-const { L2_INSTANCE } = require('./brief');
-const { classifyTurn } = require('./classifier');
-const { clientReply } = require('./persona');
-const { evaluate } = require('./evaluator');
-const { issueCredential, verifyCredential, getRecipientCredentials, hashEvidence } = require('./web3');
+const { json, html, redirect, readBody, serveStatic } = require('./http');
+const { initStore, getStore } = require('./store');
+const { currentUser, ensureUser, cleanDisplayName } = require('./identity');
+const sessions = require('./sessions');
+const skills = require('./skills');
+const { describeRouting } = require('./ai/router');
 
-const sessions = new Map(); // id -> { brief, state, messages, candidateTurns, telemetry, startedAt, walletAddress }
+const views = {
+  landing: require('./views/landing'),
+  skills: require('./views/skills'),
+  skill: require('./views/skill'),
+  methodology: require('./views/methodology'),
+  error: require('./views/error'),
+};
 
-function json(res, code, obj) {
-  const body = JSON.stringify(obj);
-  res.writeHead(code, { 'content-type': 'application/json', 'content-length': Buffer.byteLength(body) });
-  res.end(body);
+const PUBLIC_DIR = path.join(__dirname, 'public');
+
+// ── Routing ──────────────────────────────────────────────────────────────────
+
+/** Match '/skills/:id' against a pathname; returns params or null. */
+function match(pattern, pathname) {
+  const p = pattern.split('/').filter(Boolean);
+  const u = pathname.split('/').filter(Boolean);
+  if (p.length !== u.length) return null;
+  const params = {};
+  for (let i = 0; i < p.length; i++) {
+    if (p[i].startsWith(':')) params[p[i].slice(1)] = decodeURIComponent(u[i]);
+    else if (p[i] !== u[i]) return null;
+  }
+  return params;
 }
 
-function readBody(req) {
-  return new Promise((resolve, reject) => {
-    let data = '';
-    req.on('data', c => { data += c; if (data.length > 1e6) req.destroy(); });
-    req.on('end', () => { try { resolve(data ? JSON.parse(data) : {}); } catch (e) { reject(e); } });
-    req.on('error', reject);
-  });
-}
+async function handle(req, res, url) {
+  const { pathname } = url;
+  const method = req.method;
 
-async function handleStart(res, body = {}) {
-  const id = crypto.randomUUID();
-  const brief = L2_INSTANCE; // production: generated per candidate from the level template
-  const state = new ClientState();
-  const messages = [{ role: 'assistant', content: brief.openingLine }];
-  sessions.set(id, {
-    brief,
-    state,
-    messages,
-    candidateTurns: 0,
-    telemetry: { focusLosses: 0, pasteBlocks: 0 },
-    startedAt: Date.now(),
-    walletAddress: body.walletAddress || null,
-  });
-  json(res, 200, {
-    sessionId: id,
-    mockMode: CONFIG.mockMode,
-    clientName: brief.client.name,
-    scenario: `Discovery call · ${brief.client.role}`,
-    opening: brief.openingLine,
-  });
-}
-
-async function handleMessage(res, body) {
-  const s = sessions.get(body.sessionId);
-  if (!s) return json(res, 404, { error: 'unknown session' });
-  if (body.walletAddress && !s.walletAddress) s.walletAddress = body.walletAddress;
-  const text = String(body.message || '').trim();
-  if (!text) return json(res, 400, { error: 'empty message' });
-  if (s.candidateTurns >= CONFIG.maxCandidateTurns) return json(res, 400, { error: 'turn limit reached — end the session' });
-
-  s.candidateTurns += 1;
-  s.messages.push({ role: 'user', content: text });
-
-  // 1) classify candidate behavior (AI interprets)
-  const cueIds = s.brief.cues.map(c => c.id);
-  const recent = s.messages.slice(-6).map(m => `${m.role === 'assistant' ? 'CLIENT' : 'CANDIDATE'}: ${m.content}`).join('\n');
-  const behaviors = await classifyTurn(text, cueIds, recent);
-
-  // 2) update state (deterministic rules apply)
-  const applied = s.state.update(behaviors, s.candidateTurns);
-
-  // 3) client replies, conditioned on new state + newly unlocked cues
-  const reply = await clientReply(s.brief, s.state, s.messages, s.candidateTurns);
-  s.messages.push({ role: 'assistant', content: reply });
-
-  json(res, 200, {
-    reply,
-    turn: s.candidateTurns,
-    // debug block — visible in prototype only; NEVER shipped to candidates in production
-    debug: { behaviors, applied, state: s.state.snapshot(), unlockedCues: s.state.unlockedCues(s.brief.cues).map(c => c.id) },
-  });
-}
-
-async function handleEnd(res, body) {
-  const s = sessions.get(body.sessionId);
-  if (!s) return json(res, 404, { error: 'unknown session' });
-  if (body.telemetry) s.telemetry = { ...s.telemetry, ...body.telemetry };
-  if (body.walletAddress) s.walletAddress = body.walletAddress;
-
-  const report = await evaluate(s.brief, s.messages, s.state.trajectory);
-  report.telemetry = s.telemetry; // integrity signals: logged, never deducted from score
-  report.durationMin = Math.round((Date.now() - s.startedAt) / 60000);
-
-  // Cryptographic evidence hash: hashes off-chain evidence (anchors, quotes, trajectory)
-  const evidencePayload = {
-    sessionId: body.sessionId,
-    statedProblem: s.brief.statedProblem,
-    actualProblem: s.brief.actualProblem,
-    turns: s.candidateTurns,
-    points: report.points,
-    anchorScores: report.anchorScores,
-    universalFails: report.universalFails,
-    trustDelta: report.trustDelta,
-    opennessDelta: report.opennessDelta,
-    endedAt: Date.now(),
-  };
-  const evidenceHash = hashEvidence(evidencePayload);
-
-  report.evidenceHash = evidenceHash;
-  report.walletAddress = s.walletAddress;
-  report.web3 = {
-    isConfigured: CONFIG.isWeb3Configured,
-    contractAddress: CONFIG.contractAddress,
-    explorerUrl: CONFIG.explorerUrl,
-    sepoliaRpcUrl: CONFIG.sepoliaRpcUrl,
-  };
-
-  sessions.delete(body.sessionId);
-  json(res, 200, report);
-}
-
-async function handleIssueCredential(res, body) {
-  try {
-    const { recipient, skill, level, evidence } = body || {};
-    if (!recipient) {
-      return json(res, 400, { error: 'Recipient wallet address is required' });
-    }
-
-    const result = await issueCredential({
-      recipient,
-      skill: skill || 'Problem Framing',
-      level: level || 'L2',
-      evidence: evidence || { timestamp: Date.now() },
+  // ── Health. Render's health check hits this; it must not touch the database
+  // on every poll, so it reports store kind without querying.
+  if (method === 'GET' && pathname === '/healthz') {
+    return json(res, 200, {
+      ok: true,
+      mode: CONFIG.mockMode ? 'mock' : 'live',
+      store: getStore().kind,
+      liveSessions: sessions.count(),
+      uptimeSec: Math.round(process.uptime()),
     });
-
-    json(res, 200, result);
-  } catch (err) {
-    console.error('[Web3 Issuance]', err);
-    json(res, 500, { error: err.message });
   }
+
+  // ── Static assets
+  if (method === 'GET' && (pathname === '/rubrik.css' || pathname.startsWith('/js/') || pathname.startsWith('/assets/'))) {
+    if (serveStatic(res, PUBLIC_DIR, pathname)) return;
+    return notFound(res);
+  }
+
+  const user = await currentUser(req);
+
+  // ── Pages
+  if (method === 'GET' && pathname === '/') {
+    return html(res, 200, views.landing.render({ user }));
+  }
+
+  if (method === 'GET' && pathname === '/skills') {
+    return html(res, 200, views.skills.render({ user }));
+  }
+
+  if (method === 'GET' && pathname === '/methodology') {
+    return html(res, 200, views.methodology.render({ user }));
+  }
+
+  {
+    const p = match('/skills/:id', pathname);
+    if (method === 'GET' && p) {
+      const skill = skills.bySkillId(p.id);
+      if (!skill) return notFound(res, 'No such skill.');
+      return html(res, 200, views.skill.render({ skill, user }));
+    }
+  }
+
+  // ── Assessment routes are registered by their own modules (see M2/M3).
+  for (const route of assessmentRoutes) {
+    const p = match(route.pattern, pathname);
+    if (p && route.method === method) {
+      const body = method === 'POST' ? await readBody(req) : {};
+      return route.handler({ req, res, url, params: p, body, user });
+    }
+  }
+
+  // ── Identity
+  if (method === 'POST' && pathname === '/api/identity') {
+    const body = await readBody(req);
+    const name = cleanDisplayName(body.displayName);
+    if (!name) return json(res, 400, { error: 'A name is required.' });
+    const u = await ensureUser(req, res, name);
+    return json(res, 200, { handle: u.handle, displayName: u.display_name });
+  }
+
+  if (method === 'GET' && pathname === '/api/whoami') {
+    return json(res, 200, user
+      ? { signedIn: true, handle: user.handle, displayName: user.display_name }
+      : { signedIn: false });
+  }
+
+  if (method === 'GET' && pathname === '/api/routing') {
+    // Diagnostics: which provider/model serves each task. Names only, no keys.
+    return json(res, 200, describeRouting());
+  }
+
+  return notFound(res);
 }
 
-async function handleVerifyCredential(res, queryOrBody) {
-  try {
-    const { credentialId, walletAddress } = queryOrBody || {};
-    if (credentialId) {
-      const result = await verifyCredential(credentialId);
-      return json(res, 200, result);
-    }
-    if (walletAddress) {
-      const result = await getRecipientCredentials(walletAddress);
-      return json(res, 200, { walletAddress, credentials: result });
-    }
-    json(res, 400, { error: 'Provide credentialId or walletAddress to verify' });
-  } catch (err) {
-    console.error('[Web3 Verification]', err);
-    json(res, 500, { error: err.message });
-  }
+function notFound(res, detail) {
+  return html(res, 404, views.error.render({
+    code: 404,
+    title: 'Not here',
+    detail: detail || 'That page does not exist.',
+  }));
 }
+
+// Routes contributed by assessment modules. Kept as a list so each assessment
+// owns its own endpoints instead of this file accumulating them.
+const assessmentRoutes = [];
+function registerRoutes(routes) { assessmentRoutes.push(...routes); }
+
+// ── Server ───────────────────────────────────────────────────────────────────
 
 const server = http.createServer(async (req, res) => {
+  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   try {
-    const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
-    const pathname = parsedUrl.pathname;
-
-    if (req.method === 'GET' && (pathname === '/' || pathname === '/index.html')) {
-      const html = fs.readFileSync(path.join(__dirname, 'public', 'index.html'));
-      res.writeHead(200, { 'content-type': 'text/html; charset=utf-8' });
-      return res.end(html);
+    await handle(req, res, url);
+  } catch (err) {
+    const status = err.statusCode || 500;
+    // Log the real error; never send provider or database detail to a client.
+    console.error(`[${status}] ${req.method} ${url.pathname}:`, err.stack || err.message);
+    if (res.headersSent) return res.end();
+    if (url.pathname.startsWith('/api/')) {
+      return json(res, status, {
+        error: status === 500
+          ? 'Something went wrong on our side. Your session is still open — try again.'
+          : err.message,
+      });
     }
-
-    if (req.method === 'GET' && pathname === '/api/verify-credential') {
-      const q = Object.fromEntries(parsedUrl.searchParams.entries());
-      return await handleVerifyCredential(res, q);
-    }
-
-    if (req.method === 'POST' && pathname === '/api/start') return await handleStart(res, await readBody(req));
-    if (req.method === 'POST' && pathname === '/api/message') return await handleMessage(res, await readBody(req));
-    if (req.method === 'POST' && pathname === '/api/end') return await handleEnd(res, await readBody(req));
-    if (req.method === 'POST' && pathname === '/api/issue-credential') return await handleIssueCredential(res, await readBody(req));
-    if (req.method === 'POST' && pathname === '/api/verify-credential') return await handleVerifyCredential(res, await readBody(req));
-
-    json(res, 404, { error: 'not found' });
-  } catch (e) {
-    console.error(e);
-    json(res, 500, { error: e.message });
+    return html(res, status, views.error.render({
+      code: status,
+      title: 'Something broke',
+      detail: 'An unexpected error occurred. This has been logged.',
+    }));
   }
 });
 
-server.listen(CONFIG.port, () => {
-  console.log(`\n  rubrik. engine → http://localhost:${CONFIG.port}`);
-  console.log(`  mode: ${CONFIG.mockMode ? 'MOCK (no ANTHROPIC_API_KEY — scripted client, sample report)' : 'LIVE (' + CONFIG.personaModel + ')'}\n`);
+async function boot() {
+  await initStore();
+  sessions.startSweeper();
+
+  // Assessment modules register after the store exists.
+  registerRoutes(require('./routes/consultancy').routes);
+  registerRoutes(require('./routes/composition').routes);
+
+  server.listen(CONFIG.port, () => {
+    const routing = describeRouting();
+    console.log(`\n  rubrik. → http://localhost:${CONFIG.port}`);
+    console.log(`  mode: ${CONFIG.mockMode
+      ? 'MOCK (no provider key — scripted client, heuristic scoring)'
+      : `LIVE (${routing.providers.join(' → ')})`}`);
+    if (CONFIG.debugPanel) {
+      console.log('  ⚠ DEBUG_PANEL=on — client state is exposed. Never enable where candidates can reach it.');
+    }
+    console.log('');
+  });
+}
+
+boot().catch(err => {
+  console.error('\n  failed to start:', err.message, '\n');
+  process.exit(1);
 });
+
+// Render sends SIGTERM on deploy; close cleanly so in-flight requests finish.
+for (const signal of ['SIGTERM', 'SIGINT']) {
+  process.on(signal, () => {
+    console.log(`\n  ${signal} — shutting down`);
+    server.close(() => getStore?.().close?.().finally(() => process.exit(0)));
+    setTimeout(() => process.exit(0), 5000).unref();
+  });
+}
+
+module.exports = { server, registerRoutes };
