@@ -33,6 +33,7 @@ const views = {
   skill: require('./views/skill'),
   methodology: require('./views/methodology'),
   result: require('./views/result'),
+  profile: require('./views/profile'),
   error: require('./views/error'),
 };
 
@@ -96,6 +97,30 @@ async function handle(req, res, url) {
       const skill = skills.bySkillId(p.id);
       if (!skill) return notFound(res, 'No such skill.');
       return html(res, 200, views.skill.render({ skill, user }));
+    }
+  }
+
+  {
+    const p = match('/profile/:handle', pathname);
+    if (method === 'GET' && p) {
+      const store = getStore();
+      // 'me' resolves to the signed-in user; redirect to their real handle so the
+      // URL is shareable, or show the empty state if there is no identity yet.
+      if (p.handle === 'me') {
+        if (!user) return html(res, 200, views.profile.render({ owner: null, signedIn: false }));
+        return redirect(res, `/profile/${user.handle}`);
+      }
+      const owner = await store.users.byHandle(p.handle);
+      if (!owner) return notFound(res, 'No profile at that address.');
+      const [verified, attempts] = await Promise.all([
+        store.verified.listByUser(owner.id),
+        store.attempts.listByUser(owner.id),
+      ]);
+      return html(res, 200, views.profile.render({
+        owner, verified, attempts,
+        isOwner: Boolean(user && user.id === owner.id),
+        signedIn: Boolean(user),
+      }));
     }
   }
 
