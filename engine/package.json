@@ -1,29 +1,21 @@
 {
   "name": "@rubric/engine",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
+  "description": "rubrik. — skill verification engine and web app. Long-running Node HTTP server, no build step.",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "engine": "node server.js",
-    "compile": "node scripts/compile.js",
-    "deploy:sepolia": "node scripts/deploy.js"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "engine": "node server.js"
   },
   "dependencies": {
-    "next": "^14.0.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "groq-sdk": "^0.3.0",
-    "zod": "^3.22.0",
-    "ethers": "^6.13.4"
+    "pg": "^8.13.1"
   },
-  "devDependencies": {
-    "typescript": "^5.2.0",
-    "@types/node": "^20.0.0",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
-    "solc": "^0.8.20"
+  "comments": {
+    "why-one-dependency": "The server, router, assessment pipeline and UI are all standard library. `pg` is the only dependency because PostgreSQL needs a driver; with DATABASE_URL unset the engine uses a JSON file store and needs no install at all.",
+    "removed-in-v1": "next, react, react-dom, typescript and @types/* were declared but no Next.js app ever existed (no app/ or pages/ directory, no next-env.d.ts) — `next build` could never have succeeded. groq-sdk and zod were unused: providers are reached with fetch via engine/ai/, which is what makes them interchangeable. ethers and solc belonged to the on-chain credential work, which is out of the V1 flow; engine/web3.js already degrades without ethers, and the deploy/compile scripts need `npm install ethers solc` if that work resumes."
   }
 }

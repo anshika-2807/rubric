@@ -1,0 +1,52 @@
+# Render blueprint — rubrik. V1
+#
+# Deploy: Render dashboard → New → Blueprint → point at this repo.
+# Creates one web service and one Postgres instance, and wires DATABASE_URL
+# between them automatically.
+#
+# Provider API keys are marked sync:false so Render prompts for them instead of
+# storing them in this file. Never commit a key here.
+
+services:
+  - type: web
+    name: rubrik-engine
+    runtime: node
+    plan: free
+    rootDir: engine
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /healthz
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: rubrik-db
+          property: connectionString
+      # Render's managed Postgres requires TLS.
+      - key: PGSSL
+        value: require
+      - key: NODE_ENV
+        value: production
+
+      # ── AI providers ────────────────────────────────────────────────────────
+      # Supply at least one. With none, the service still runs in mock mode and
+      # the whole flow stays clickable — evaluations are labelled as heuristic.
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: AI_FALLBACK_ORDER
+        value: groq,gemini,openai
+      - key: AI_SESSION_CALL_BUDGET
+        value: "80"
+
+      # DEBUG_PANEL is deliberately absent. It exposes the cue-unlock mechanism,
+      # which is hidden assessment material, and must stay off anywhere a real
+      # candidate can reach.
+
+databases:
+  - name: rubrik-db
+    plan: free
+    databaseName: rubrik
+    postgresMajorVersion: "16"
