@@ -32,6 +32,7 @@ const views = {
   skills: require('./views/skills'),
   skill: require('./views/skill'),
   methodology: require('./views/methodology'),
+  result: require('./views/result'),
   error: require('./views/error'),
 };
 
@@ -95,6 +96,21 @@ async function handle(req, res, url) {
       const skill = skills.bySkillId(p.id);
       if (!skill) return notFound(res, 'No such skill.');
       return html(res, 200, views.skill.render({ skill, user }));
+    }
+  }
+
+  {
+    const p = match('/result/:id', pathname);
+    if (method === 'GET' && p) {
+      const row = await getStore().attempts.get(p.id);
+      if (!row || row.status !== 'complete') {
+        return notFound(res, 'No completed result at that address.');
+      }
+      const owner = await getStore().users.byId(row.user_id);
+      return html(res, 200, views.result.render({
+        row, owner, viewer: user,
+        shareUrl: `${url.origin}/result/${row.id}`,
+      }));
     }
   }
 
