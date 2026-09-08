@@ -1,7 +1,7 @@
 // Client persona — LLM speaks, state machine governs.
 // The system prompt is rebuilt EVERY turn from current state + unlocked cues.
 
-const { callClaude } = require('./llm');
+const { callModel } = require('./ai/router');
 const { CONFIG } = require('./config');
 
 function buildSystem(brief, state) {
@@ -44,15 +44,28 @@ const MOCK_LINES = [
   "...huh. I hadn't put those together like that.",
 ];
 
-async function clientReply(brief, state, messages, turn) {
+// Said when the provider is unreachable. Deliberately content-free: it must not
+// leak a cue, and it must not advance the scenario, because nothing was
+// generated. The candidate loses no ground and the state machine is untouched.
+const DEGRADED_LINE =
+  "Sorry — could you say that again? I lost you for a second there.";
+
+async function clientReply(brief, state, messages, turn, budget) {
   if (CONFIG.mockMode) return MOCK_LINES[Math.min(turn - 1, MOCK_LINES.length - 1)];
-  const text = await callClaude({
-    model: CONFIG.personaModel,
-    maxTokens: 400,
-    system: buildSystem(brief, state),
-    messages, // [{role:'user'|'assistant', content}] — assistant = client
-  });
-  return (text || '').trim();
+  try {
+    const text = await callModel({
+      task: 'persona',
+      maxTokens: 400,
+      budget,
+      system: buildSystem(brief, state),
+      messages, // [{role:'user'|'assistant', content}] — assistant = client
+    });
+    const reply = (text || '').trim();
+    return reply || DEGRADED_LINE;
+  } catch (e) {
+    console.error('[persona] provider unavailable, degrading:', e.message);
+    return DEGRADED_LINE;
+  }
 }
 
 module.exports = { clientReply, buildSystem };
