@@ -38,8 +38,22 @@ class ClientState {
     return applied;
   }
 
-  unlockedCues(cues) {
-    return cues.filter(c => this.trust >= (c.minTrust || 0) && this.openness >= (c.minOpenness || 0));
+  /**
+   * Which cues the client is currently willing to volunteer.
+   *
+   * Gated on emotional state AND elapsed turns. The turn gate exists because
+   * state thresholds alone can be cleared in one or two strong messages, and a
+   * client who empties her whole brief in the first ninety seconds is neither
+   * realistic nor discriminating — every candidate would look equally good.
+   *
+   * @param {Array}  cues
+   * @param {number} turn  current candidate turn number
+   */
+  unlockedCues(cues, turn = Infinity) {
+    return cues.filter(c =>
+      this.trust >= (c.minTrust || 0) &&
+      this.openness >= (c.minOpenness || 0) &&
+      turn >= (c.minTurn || 0));
   }
 
   // Natural-language style directives injected into the persona prompt each turn.
