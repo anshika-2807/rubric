@@ -2,7 +2,7 @@
 // discrete behaviors; state.js applies deterministic rules to them.
 // AI classifies — policy scores. Never the other way around.
 
-const { callClaude, extractJson } = require('./llm');
+const { callModel, extractJson } = require('./ai/router');
 const { CONFIG } = require('./config');
 
 const SYSTEM = `You classify one message from a candidate who is interviewing a business client in a consulting discovery conversation. Return STRICT JSON only, no prose:
@@ -37,13 +37,15 @@ function heuristicClassify(text) {
   };
 }
 
-async function classifyTurn(candidateMessage, cueIds, recentContext) {
+async function classifyTurn(candidateMessage, cueIds, recentContext, budget) {
   const mock = heuristicClassify(candidateMessage);
   if (CONFIG.mockMode) return mock;
   try {
-    const text = await callClaude({
-      model: CONFIG.classifierModel,
+    const text = await callModel({
+      task: 'classify',        // smallest model: this is the highest-volume call
       maxTokens: 400,
+      json: true,
+      budget,
       system: SYSTEM.replace('CUE_IDS', JSON.stringify(cueIds)),
       messages: [{
         role: 'user',
@@ -51,11 +53,13 @@ async function classifyTurn(candidateMessage, cueIds, recentContext) {
       }],
     });
     const parsed = extractJson(text);
-    return parsed || mock;
+    return parsed ? { ...mock, ...parsed } : mock;
   } catch (e) {
-    console.error('classifier fallback:', e.message);
+    // Degrading to the heuristic here is safe: it keeps the state machine
+    // advancing on real (if coarser) behaviour rather than freezing the session.
+    console.error('[classifier] falling back to heuristic:', e.message);
     return mock;
   }
 }
 
-module.exports = { classifyTurn };
+module.exports = { classifyTurn, heuristicClassify };

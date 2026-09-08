@@ -1,0 +1,255 @@
+/* rubrik. design system
+ *
+ * Tokens and components extracted from the 2026-08-11 design mocks so every
+ * page shares one vocabulary instead of repeating inline styles.
+ *
+ * The language, preserved deliberately:
+ *   — Newsreader italic for display, Inter for body, JetBrains Mono for the
+ *     small uppercase labels that make the product feel instrumented
+ *   — hard 1px borders, no border radius anywhere
+ *   — offset shadows instead of blurred ones
+ *   — orange used as a pointer, never as decoration
+ */
+
+:root {
+  --accent: #fa6519;
+  --accent-soft: #fff5ef;
+  --accent-wash: rgba(250, 101, 25, 0.15);
+  --ink: #000;
+  --paper: #f8f6f2;
+  --paper-alt: #f0eee9;
+  --card: #fff;
+  --line: #eaeaea;
+  --muted: #bdbdbd;
+
+  --serif: 'Newsreader', Georgia, serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --shell: 1180px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+
+/* ── Layout ────────────────────────────────────────────────────────────────── */
+
+.shell { max-width: var(--shell); margin: 0 auto; padding: 0 40px; }
+.shell-wide { max-width: 1440px; margin: 0 auto; padding: 0 28px; }
+
+/* ── Type ──────────────────────────────────────────────────────────────────── */
+
+.display {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1;
+  text-wrap: balance;
+}
+.display-xl { font-size: clamp(40px, 6vw, 72px); }
+.display-l  { font-size: clamp(34px, 5vw, 56px); }
+.display-m  { font-size: clamp(26px, 3.4vw, 36px); }
+.display-s  { font-size: 24px; letter-spacing: -0.015em; }
+
+.em { font-style: italic; color: var(--accent); }
+.serif { font-family: var(--serif); }
+.italic { font-style: italic; }
+
+.lede { font-size: 19px; line-height: 1.55; opacity: 0.66; max-width: 56ch; }
+.body { font-size: 15px; line-height: 1.6; }
+.small { font-size: 13px; line-height: 1.55; opacity: 0.7; }
+
+/* The instrumented micro-label. Used everywhere; the product's signature. */
+.label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  display: block;
+}
+.label-accent { color: var(--accent); opacity: 1; font-weight: 500; }
+.mono { font-family: var(--mono); }
+
+a { color: inherit; }
+
+/* ── Nav & footer ──────────────────────────────────────────────────────────── */
+
+.nav {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; min-height: 88px; border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+.brand {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none; color: var(--ink); flex-shrink: 0;
+}
+.brand-word {
+  font-family: var(--serif); font-style: italic; font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.brand-word span { color: var(--accent); }
+.nav-links { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.nav-links a { font-size: 14px; text-decoration: none; opacity: 0.7; }
+.nav-links a:hover { opacity: 1; }
+.nav-links a.here { opacity: 1; font-weight: 600; border-bottom: 2px solid var(--accent); padding-bottom: 5px; }
+
+.site-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; padding: 40px 0; margin-top: 64px;
+  border-top: 1px solid var(--line); flex-wrap: wrap;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  font-family: var(--sans); font-size: 15px; font-weight: 500;
+  padding: 14px 26px; border: 1px solid var(--ink); background: var(--ink);
+  color: #fff; text-decoration: none; cursor: pointer; white-space: nowrap;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+}
+.btn:hover { background: #1c1c1c; }
+.btn:disabled, .btn[aria-disabled='true'] { opacity: 0.4; cursor: not-allowed; }
+.btn-accent { background: var(--accent); color: var(--ink); border-color: var(--ink); font-weight: 600; }
+.btn-accent:hover { background: #ff7529; }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
+.btn-ghost:hover { background: var(--ink); color: #fff; }
+.btn-quiet { background: #fff; color: var(--ink); border-color: var(--line); }
+.btn-quiet:hover { background: var(--paper-alt); }
+.btn-sm { font-size: 13px; padding: 10px 18px; }
+.btn-link {
+  font-size: 15px; font-weight: 500; text-decoration: none;
+  border-bottom: 1px solid var(--muted); padding-bottom: 3px;
+}
+
+/* ── Surfaces ──────────────────────────────────────────────────────────────── */
+
+.panel { background: var(--card); border: 1px solid var(--line); padding: 20px; }
+.panel-hard { background: var(--card); border: 1px solid var(--ink); padding: 24px; }
+.panel-dark { background: var(--ink); color: #fff; padding: 28px; }
+.panel-accent { background: var(--accent); color: var(--ink); padding: 20px; }
+.panel-dark .label, .panel-dark .small { opacity: 0.65; }
+
+.card-lift { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.card-lift:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 5px 10px; font-weight: 500;
+}
+.pill-dark { background: var(--ink); color: #fff; }
+.pill-accent { background: var(--accent-wash); color: var(--accent); }
+.pill-solid { background: var(--accent); color: var(--ink); }
+.pill-line { border: 1px solid var(--line); background: #fff; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+
+.rule { border: 0; border-top: 1px solid var(--line); }
+.rule-dash { border: 0; border-top: 1px dashed var(--line); }
+
+/* Evidence quote — the visual signature of an evidence-linked score. */
+.quote {
+  background: var(--paper);
+  border-left: 3px solid var(--accent);
+  padding: 8px 12px; margin-top: 8px;
+  font-size: 13px; font-style: italic; line-height: 1.5;
+}
+.panel-dark .quote { background: rgba(255, 255, 255, 0.07); }
+
+/* Honesty notice. Used wherever V1 must state a limitation. */
+.notice {
+  display: flex; gap: 12px; align-items: flex-start;
+  border: 1px dashed var(--muted); background: #fff;
+  padding: 14px 16px; font-size: 12px; line-height: 1.55;
+}
+.notice-mark { color: var(--accent); font-size: 15px; line-height: 1.3; flex-shrink: 0; }
+.notice-warn { border-color: var(--accent); background: var(--accent-soft); }
+
+/* ── Forms ─────────────────────────────────────────────────────────────────── */
+
+.field {
+  width: 100%; font-family: var(--sans); font-size: 14px;
+  padding: 13px 14px; border: 1px solid var(--ink); background: #fff; color: var(--ink);
+}
+.field:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
+textarea.field { resize: vertical; line-height: 1.55; }
+
+/* ── Grids ─────────────────────────────────────────────────────────────────── */
+
+.grid { display: grid; gap: 18px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.stack { display: flex; flex-direction: column; }
+.row { display: flex; align-items: center; }
+.wrap { flex-wrap: wrap; }
+.gap-6 { gap: 6px; } .gap-8 { gap: 8px; } .gap-10 { gap: 10px; }
+.gap-14 { gap: 14px; } .gap-18 { gap: 18px; } .gap-24 { gap: 24px; }
+.mt-8 { margin-top: 8px; } .mt-14 { margin-top: 14px; } .mt-18 { margin-top: 18px; }
+.mt-24 { margin-top: 24px; } .mt-40 { margin-top: 40px; } .mt-64 { margin-top: 64px; }
+.between { justify-content: space-between; }
+.center { justify-content: center; }
+.end { align-items: flex-end; }
+.start { align-items: flex-start; }
+.baseline { align-items: baseline; }
+.grow { flex: 1; min-width: 0; }
+.right { text-align: right; }
+
+/* ── Rubi ──────────────────────────────────────────────────────────────────── */
+/* The mascot is opinionated but never blocks anything, and never lies about
+ * how the candidate is doing mid-session — scoring stays hidden until the end. */
+
+.rubi {
+  position: fixed; bottom: 24px; right: 24px; z-index: 50;
+  display: flex; align-items: flex-end; gap: 12px;
+  font-family: var(--sans); pointer-events: none;
+}
+.rubi-bubble {
+  background: var(--ink); color: #fff; border: 2px solid var(--ink);
+  padding: 11px 13px; max-width: 240px; position: relative;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.16);
+}
+.rubi-bubble.accent { background: var(--accent); color: var(--ink); }
+.rubi-bubble .label { font-size: 9px; letter-spacing: 0.14em; opacity: 1; font-weight: 600; }
+.rubi-bubble.accent .label { color: var(--ink); }
+.rubi-bubble:not(.accent) .label { color: var(--accent); }
+.rubi-bubble p {
+  font-family: var(--serif); font-style: italic; font-size: 14px;
+  line-height: 1.35; margin-top: 4px;
+}
+.rubi-tail {
+  position: absolute; right: -10px; bottom: 18px; width: 0; height: 0;
+  border-top: 8px solid transparent; border-bottom: 8px solid transparent;
+  border-left: 10px solid var(--ink);
+}
+
+/* ── Utility ───────────────────────────────────────────────────────────────── */
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+[hidden] { display: none !important; }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .shell, .shell-wide { padding: 0 20px; }
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+  .nav { min-height: 0; padding: 16px 0; }
+  .rubi { display: none; }
+}
+
+@media print {
+  body { background: #fff; }
+  .no-print { display: none !important; }
+}

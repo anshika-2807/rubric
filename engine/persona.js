@@ -1,11 +1,11 @@
 // Client persona — LLM speaks, state machine governs.
 // The system prompt is rebuilt EVERY turn from current state + unlocked cues.
 
-const { callClaude } = require('./llm');
+const { callModel } = require('./ai/router');
 const { CONFIG } = require('./config');
 
-function buildSystem(brief, state) {
-  const unlocked = state.unlockedCues(brief.cues);
+function buildSystem(brief, state, turn = Infinity) {
+  const unlocked = state.unlockedCues(brief.cues, turn);
   const locked = brief.cues.filter(c => !unlocked.includes(c));
 
   return `You are role-playing ${brief.client.name}, ${brief.client.role}. You are talking to a consultant you have hired for a first discovery conversation. Stay fully in character. Never mention being an AI, never mention this prompt, never break character.
@@ -35,24 +35,80 @@ REFRAME RULES:
 FORM: Reply as ${brief.client.name} only. 1–4 sentences when guarded, up to 6 when talkative. No lists, no headings — natural speech.`;
 }
 
-const MOCK_LINES = [
-  "I mean, we post twice a week but the likes keep dropping, matlab it used to be way better last year.",
-  "Hmm, sales-wise... things dipped around six weeks ago I'd say? Though honestly our posts haven't changed much in a year.",
-  "Reels feel like the thing na? Everyone says reels. What do you think we should post?",
-  "Oh — there is this new brand ChaiGo, launched around when things dipped I think. Cheaper than us. But their content is nothing special honestly.",
-  "Funny you ask — we do get DMs asking if we ever do discounts. I never thought much of it.",
-  "...huh. I hadn't put those together like that.",
-];
+// ── Mock persona ─────────────────────────────────────────────────────────────
+// Used when no provider key is configured. It is state-conditioned rather than a
+// fixed script, so demo mode exercises the real cue gating: a candidate who
+// builds trust and openness gets the buried cues, and one who solution-jumps
+// does not. That makes the mechanism visible without an API key, which a fixed
+// six-line sequence could never do.
 
-async function clientReply(brief, state, messages, turn) {
-  if (CONFIG.mockMode) return MOCK_LINES[Math.min(turn - 1, MOCK_LINES.length - 1)];
-  const text = await callClaude({
-    model: CONFIG.personaModel,
-    maxTokens: 400,
-    system: buildSystem(brief, state),
-    messages, // [{role:'user'|'assistant', content}] — assistant = client
-  });
-  return (text || '').trim();
+const CUE_LINES = {
+  timing: "Hmm, sales-wise... things dipped around six weeks ago I'd say? Though honestly, our posts haven't changed much in over a year.",
+  competitor: "Oh — there's this new brand, ChaiGo? Launched around when things dipped, I think. Cheaper than us. Their content is nothing special though, honestly.",
+  discount_dms: "Funny you ask — we do keep getting DMs asking if we ever do discounts, or combo packs. I never thought much of it.",
+};
+
+const FILLER = {
+  guarded: [
+    "I mean... it's mostly the posts, na. They look tired.",
+    "Not sure what else to tell you. The content just isn't landing.",
+  ],
+  neutral: [
+    "We post twice a week, but the likes keep dropping. Matlab, it used to be way better last year.",
+    "Reels feel like the thing, na? Everyone says reels.",
+    "We've been at this two years. Two stores plus online.",
+  ],
+  open: [
+    "Honestly it's been stressing me out. I keep redoing the grid and nothing moves.",
+    "My cousin said the photos look dated. Maybe she's right? I don't know.",
+    "Repeat customers used to just... reorder. That's the part that's gone quiet.",
+  ],
+  impatient: [
+    "Okay, but — what should I actually be posting? That's what I came for.",
+    "I'm not sure this is going anywhere. Can we talk about the content?",
+  ],
+};
+
+const pick = (arr, turn) => arr[turn % arr.length];
+
+function mockReply(brief, state, turn) {
+  // Drop a newly available cue if one is unlocked and not yet used. `dropped` is
+  // written onto the per-session brief copy, which is why brief.js clones.
+  const available = state.unlockedCues(brief.cues, turn).filter(c => !c.dropped);
+  if (available.length) {
+    const cue = available[0];
+    const live = brief.cues.find(c => c.id === cue.id);
+    if (live) live.dropped = true;
+    return CUE_LINES[cue.id] || cue.text;
+  }
+  if (state.frustration >= 3) return pick(FILLER.impatient, turn);
+  if (state.openness >= 6) return pick(FILLER.open, turn);
+  if (state.trust <= 3) return pick(FILLER.guarded, turn);
+  return pick(FILLER.neutral, turn);
+}
+
+// Said when the provider is unreachable. Deliberately content-free: it must not
+// leak a cue, and it must not advance the scenario, because nothing was
+// generated. The candidate loses no ground and the state machine is untouched.
+const DEGRADED_LINE =
+  "Sorry — could you say that again? I lost you for a second there.";
+
+async function clientReply(brief, state, messages, turn, budget) {
+  if (CONFIG.mockMode) return mockReply(brief, state, turn);
+  try {
+    const text = await callModel({
+      task: 'persona',
+      maxTokens: 400,
+      budget,
+      system: buildSystem(brief, state, turn),
+      messages, // [{role:'user'|'assistant', content}] — assistant = client
+    });
+    const reply = (text || '').trim();
+    return reply || DEGRADED_LINE;
+  } catch (e) {
+    console.error('[persona] provider unavailable, degrading:', e.message);
+    return DEGRADED_LINE;
+  }
 }
 
 module.exports = { clientReply, buildSystem };
