@@ -1,3 +1,7 @@
-
 engine/.env
+engine/.env.local
 engine/node_modules/
+engine/.data/
+node_modules/
+*.log
+.DS_Store
