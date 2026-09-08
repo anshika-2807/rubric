@@ -1,6 +1,6 @@
 // Consultancy session — the live discovery call.
 //
-// Derived from engine/public/index.html, restyled into the shared shell and with
+// Derived from the original single-page prototype UI, restyled into the shared shell and with
 // the client-state debug panel removed from the default view (it is hidden
 // assessment material; the server omits the data entirely unless DEBUG_PANEL is
 // on, so there is nothing here to reveal).
